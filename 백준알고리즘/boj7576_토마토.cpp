@@ -12,44 +12,36 @@ enum{NONE=-1,TOMATO,WELL};
 int dir_x[4] = {1,-1,0,0};
 int dir_y[4] = {0,0,1,-1};
 int M,N;
-int ** tomato;
+int tomato[1001][1001];
 
 int findWELL()
 {
 	bool flag = false;
 	int days = 0;
-	queue <int> que;
+	queue <pair <int,int> > que;
 
 	//익었으면 시작한다. 
 	for(int i = 0 ; i < N; i++)
 	{
 		for (int j = 0 ; j <M;j++)
 		{
-			try
-			{		
-
-				printf("%d %d",i,j);
-				if(tomato[i][j] == WELL)
-					que.push(2);
-			}
-			catch (const exception& e)
+			if (tomato[i][j] == WELL)
 			{
-
+				pair<int, int> p(i, j);
+				que.push(p);
 			}
 		}
 	}
-	printf("fasfs");
+
 	while(!que.empty())
 	{
-		flag = true;
 		int size = que.size();
 		while(size--)
 		{
-			int atom = que.front();
+			int tmp_x = que.front().first;
+			int tmp_y = que.front().second;
 			que.pop();
-			int tmp_x = atom/10000000;
-			int tmp_y = atom%10000000;
-
+			
 			for(int i = 0 ; i < 4 ; i ++)
 			{
 				int x = tmp_x;
@@ -58,35 +50,35 @@ int findWELL()
 				x+= dir_x[i];
 				y+= dir_y[i];
 				
-				if(x < 0 || y <0 || x >= M || y >= N)
+				if (x < 0 || y < 0 || x >= N || y >= M)
 					continue;
-				if(tomato[x][y]!=TOMATO)
+				if (tomato[x][y] != TOMATO)
 					continue;
+
 				tomato[x][y] = WELL;
-				que.push(10000000*x+y);
+				pair <int, int> atom(x, y);
+				que.push(atom);
+				flag = true;
 			}
 		}
 		days++;
 	}
 
-	for (int i= 0 ; i <M;i ++)
-		for(int j = 0; j <N;j++)
-			if(tomato[i][j]!=WELL)
+	if (!flag) return 0;
+	
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < M; j++)
+			if (tomato[i][j] == TOMATO)
 				return -1;
-
-	if(!flag) return 0;
-	else return days;
+	else return days-1;
 }
 
 
 
-int main()
+ int main()
 {
 	scanf("%d%d",&M,&N);
-	int ** tomato = new int* [N];
-	for (int i = 0 ; i < N; i++)
-		tomato[i] = new int[M];
-
+	
 	for (int i =0; i <N;i++)
 	{
 		for(int j = 0 ; j < M ;j++)
@@ -94,19 +86,9 @@ int main()
 			scanf("%d",&tomato[i][j]);
 		}
 	}
-	printf("%d %d",M,N);
 
-printf("\n");
-
-	for (int i =0; i <N;i++)
-	{
-		for(int j = 0 ; j < M ;j++)
-		{
-			printf("%d",tomato[i][j]);
-		}
-printf("\n");
-	}
-	cout<<findWELL();
+	
+	printf("%d",findWELL());
 	return 0;
 }
 
