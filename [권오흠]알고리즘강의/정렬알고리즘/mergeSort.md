@@ -37,4 +37,4 @@ recursion의 base case 는 start >= end 입니다. // 리스트의 길이가 0�
 
 어느 것을 선택하느냐에 따라 구현이 조금 달라집니다. 
 
-[!MergeSort](https://raw.githubusercontent.com/hobbang2/Algorithm/master/%5B%EA%B6%8C%EC%98%A4%ED%9D%A0%5D%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EA%B0%95%EC%9D%98/%EC%A0%95%EB%A0%AC%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/notes/mergeSort.jpg)
+![MergeSort](https://raw.githubusercontent.com/hobbang2/Algorithm/master/%5B%EA%B6%8C%EC%98%A4%ED%9D%A0%5D%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EA%B0%95%EC%9D%98/%EC%A0%95%EB%A0%AC%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/notes/mergeSort.jpg)
