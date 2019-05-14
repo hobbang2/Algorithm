@@ -78,7 +78,7 @@ data는 아마도 linear한 형태로 들어올 것입니다.
 
 따라서 그 자체로 complete binary tree가 됩니다. :> 
 
-1. complete binary tree를 heap으로 !
+> complete binary tree를 heap으로 !
 이제 heap으로 만들어줄 차례입니다. 어떻게 하면 좋을까요?
 
 힌트는 **node가 하나인 binary tree는 항상 heap**이라는 사실입니다.
