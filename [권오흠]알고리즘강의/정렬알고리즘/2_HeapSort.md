@@ -12,7 +12,7 @@ MergeSort는 추가 배열이 필요하고 Heap Sort는 그렇지 않다는 것�
 ### Heap의 정의
 - heap은 `complete binary tree` 이면서 
 
-![complete](./notes/full_complet.JPG)
+![complete](https://bit.ly/2Q09kDA)
 
 full binary tree는 각 level 마다 모든 노드가 가득 차 있어야 합니다.
 
