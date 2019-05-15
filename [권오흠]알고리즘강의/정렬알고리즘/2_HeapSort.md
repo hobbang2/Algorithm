@@ -99,8 +99,19 @@ data는 아마도 linear한 형태로 들어올 것입니다.
 heap-size[A] <- length[A]
 for i <- [length[A]/2] downto 1
     do MAX-HEAPIFY(A,i)
-=> O(N)
 ```
 우리는 마지막 node(index =n)에서 시작하여 처음으로 leaf node가 아닌 node에서부터 heapify를 시작했습니다.
 
 그러면 heapify를 시작하는 node의 index는 무엇일까요 ?  => ceiling(n/2)
+
+따라서 heapify 반복 횟수인 n/2 과 max heapify 시간복잡도인 log n을 곱한 O(nlogn)이 build-max-heap의 시간복잡도처럼 보입니다.
+
+하지만! sub tree 마다 max heapify를 해주므로 heapify의 시간복잡도가 실제로 logn인 것은 아닙니다.
+
+실제로 수학적인 계산을 해보면 build-max-heap의 시간복잡도는 O(n)이 됩니다.
+
+> complete binary tree를 heap으로 !
+
+
+
+
