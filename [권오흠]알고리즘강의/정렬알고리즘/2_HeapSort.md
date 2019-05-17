@@ -116,10 +116,6 @@ for i <- [length[A]/2] downto 1
 
 네 ! Heap에서 최대값은 root node에 있기 때문입니다. 
 
-그림 예시를 봅시다. 
-
-![sort_example](https://bit.ly/2Q8ouqt)
-
 Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집니다. 
 
 1) raw data -> heap
@@ -127,6 +123,7 @@ Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집
 3) heap_size -=1
 4) heapify(root_node)
 
+ pseudocode는 다음과 같습니다. 
 ![sudo_heap](https://bit.ly/2LM5NKB)
 
 
