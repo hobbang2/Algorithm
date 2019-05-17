@@ -124,6 +124,7 @@ Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집
 4) heapify(root_node)
 
  pseudocode는 다음과 같습니다. 
+ 
 ![sudo_heap](https://bit.ly/2LM5NKB)
 
 
