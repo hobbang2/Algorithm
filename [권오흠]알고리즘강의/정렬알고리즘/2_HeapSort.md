@@ -1,4 +1,7 @@
 [참고강의 바로가기](https://bit.ly/2Q1yh1y)
+
+![heap_note](https://bit.ly/2JMofjM)
+
 ~~HeapSort는 개인적으로 너무 복잡하고 어렵게 느껴지는 알고리즘ㅠㅠ~~ 
 
 HeapSort는 `heap` 또는 `binary heap` 이라는 자료구조를 이용하는 정렬 알고리즘입니다.
@@ -127,6 +130,5 @@ Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집
  
 ![sudo_heap](https://bit.ly/2LM5NKB)
 
-![heap_note](https://bit.ly/2JMofjM)
 
 
