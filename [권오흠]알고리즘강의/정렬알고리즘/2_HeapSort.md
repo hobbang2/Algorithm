@@ -127,6 +127,6 @@ Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집
  
 ![sudo_heap](https://bit.ly/2LM5NKB)
 
-
+![heap_note](https://bit.ly/2JMofjM)
 
 
