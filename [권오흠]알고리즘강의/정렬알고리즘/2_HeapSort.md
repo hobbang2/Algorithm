@@ -110,7 +110,19 @@ for i <- [length[A]/2] downto 1
 
 실제로 수학적인 계산을 해보면 build-max-heap의 시간복잡도는 O(n)이 됩니다.
 
-> complete binary tree를 heap으로 !
+> 만들어진 heap을 이용하여 정렬을 해보자 !
+
+주어진 데이터로 heap을 구성했을 때 최댓값을 바로 찾을 수 있을까요 ? 
+
+네 ! Heap에서 최대값은 root node에 있기 때문입니다. 
+
+Heap을 이용한 데이터의 정렬은 다음과 같은 순서로 이루어집니다. 
+
+1) raw data -> heap
+2) swap(last value, root value)
+3) heap_size -=1
+4) heapify(root_node)
+
 
 
 
