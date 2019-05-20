@@ -51,6 +51,7 @@ void user_Heap::insertData(int input_data)
 		{
 			user_swap(data[cur_idx], data[parent_idx]);
 			cur_idx = parent_idx;
+			parent_idx = parent(cur_idx);
 		}
 	}
 }
