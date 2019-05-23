@@ -1,0 +1,74 @@
+## 정렬 문제 풀이 
+시간복잡도가 O(nlogn)이 되는 정렬 알고리즘들(Merge, Quick, Heap)을 살펴보았습니다. 
+
+이 알고리즘들을 Problem solving에서 사용해봅시다 ! 
+### 1.[[leetcode] 1046. Last Stone Weight](https://leetcode.com/contest/weekly-contest-137/problems/last-stone-weight/)
+#### 개요
+우리는 **돌 수집가** 입니다. 
+
+이 돌들을 이용해서 바위치기를 하려고 합니다. 
+
+매 turn 마다 우리는 가장 무거운 돌 2개를 골라 서로 부딪힙니다. 
+
+그러면 두 개의 돌이 사라지면서 **더 무거운 돌의 무게 - 가벼운 돌의 무게** 만큼의 무게를 가진 돌이 생겨납니다. 
+
+만약에 **두 돌의 무게가 같다면 새로운 돌은 생겨나지 않습니다.**
+
+게임은 돌이 1개 남았거나, 남은 돌이 없을 때 끝납니다. 
+
+그렇다면 1개 남은 돌의 무게는 얼마일까요 ? 남아있는 돌이 없다면 0을 출력하세요 ^_^ 
+
+#### 아이디어1
+- 가장 무거운 돌 2개를 찾아야하므로 정렬 
+- 가벼운 돌 사라지고, 무거운 돌의 무게가 감소함
+- 무게가 같다면 돌 2개 사라짐.
+``` cpp
+#include <algorithm>
+
+class Solution {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        while(stones.size() > 1)
+        {
+            sort(stones.begin(),stones.end());
+            int last_val = stones.back();
+            int second_last_val = stones[stones.size()-2];
+            int diff = last_val - second_last_val;
+            if(diff > 0)
+            {
+                stones[stones.size() -2] = diff;
+                stones.pop_back();
+            }
+            else if(diff == 0)
+            {
+                stones.pop_back();
+                stones.pop_back();
+            }
+        }
+        return (stones.empty()? 0 : stones[0]);
+    }
+};
+```
+#### 아이디어2
+- Priority Queue를 이용합니다. 
+- 우선순위(Weight)가 가장 높은 2개의 돌을 꺼내고
+- 무게의 차이만큼을 다시 queue에다 넣어줍니다. 
+- 돌이 한 개 이하로 남을 때 까지 반복합니다.
+``` cpp
+class Solution {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        priority_queue<int> pq(stones.begin(), stones.end()); 
+        if (pq.empty()) return 0; 
+        
+        while (pq.size() > 1) {
+            int mx1 = pq.top(); pq.pop(); 
+            int mx2 = pq.top(); pq.pop(); 
+            int dif = mx1 - mx2; 
+            if (dif != 0) pq.push(dif); 
+        }
+        if (pq.empty()) return 0; 
+        return pq.top(); 
+    }
+};
+```
