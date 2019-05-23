@@ -1,4 +1,5 @@
 [참고강의 바로가기](https://bit.ly/2EgSX0G)
+[읽어보면 좋을 페이지](https://bit.ly/2VVpuUY)
 
 Heap sort는 heap(binary heap) 을 이용하여 sorting을 하는 알고리즘입니다. 
 
