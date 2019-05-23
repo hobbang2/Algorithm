@@ -90,3 +90,5 @@ int user_Heap::extract()
 	return top_priority_value;
 }
 ```
+  
+Priority Queue에서 두 연산의 시간복잡도는 모두 **O(logN)** 입니다.
