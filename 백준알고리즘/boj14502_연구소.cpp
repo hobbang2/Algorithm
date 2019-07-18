@@ -1,20 +1,18 @@
 #include <iostream>
-#include <cstdio>
 #include <vector>
 #include <queue>
 #include <algorithm>
 
-
 using namespace std;
-
-enum { PATH, WALL, VIRUS,BUILD, VISITED = -1, OCCUPY = 7 };
-
-int dir_x[4] = { 1,-1,0,0 };
-int dir_y[4] = { 0,0,1,-1 };
+enum { PATH, WALL, VIRUS, VISITED = -1};
+int dir_x[4] = { 1,0,-1,0 };
+int dir_y[4] = { 0,1,0,-1 };
 
 int N, M;
+int u_max;
 vector< vector <int> > map(9, vector<int>(9, 0));
-vector<int> maxScope;
+vector< vector <int> > cp_map(9, vector<int>(9, 0));
+
 queue<int> que;
 
 bool canGO(int x, int y)
@@ -22,128 +20,159 @@ bool canGO(int x, int y)
 	// out of range
 	if (x <= 0 || y <= 0 || x > N || y > M)
 		return false;
-
-
-	if ((map[x][y] == WALL) || (map[x][y] == OCCUPY))
+	if ((map[x][y] == WALL) || (map[x][y] == VIRUS))
 		return false;
 	return true;
 }
 
+void copyMap()
+{
+	copy(map.begin(), map.end(), cp_map.begin());
+}
 
-int checkDomain(vector<vector <int> > & vec)
+/*
+
+void buidWall(int cnt, int east, int south, int west, int north,int x,int y)
+{
+	if (cnt == 3)
+	{
+		for (int i = 1; i <= N; i++)
+			for (int j = 1; j <= M; j++)
+				if (map[i][j] == VIRUS)
+					spread(i, j);
+		int domain = checkDomain();
+		if (u_max < domain)
+			u_max = domain;
+		copyMap();
+	}
+
+
+	buildWall(cnt + 1, east + 1, south, west, north);
+		return;
+}
+*/
+int checkDomain()
 {
 	int cnt = 0;
 	for (int i = 1; i <= N; i++)
 	{
-		for (int j = 0; j <= M; j++)
+		for (int j = 1; j <= M; j++)
 		{
-			if (vec[i][j] == PATH)
+			if (map[i][j] == PATH)
 				cnt++;
 		}
 	}
 	return cnt;
 }
 
-void spread(int x, int y,vector<vector <int> > &vec)
+void spread(int x, int y)
 {
-	if (!canGO(x,y)) return;
-	
-	vec[x][y] = OCCUPY;
+	if (x <= 0 || y <= 0 || x > N || y > M)
+		return;
 
-	for (int i = 0; i < 4; i++)
+	if (map[x][y] == VIRUS || map[x][y] == PATH)
 	{
-		int tmp_x = x;
-		int tmp_y = y;
+		map[x][y] = VIRUS;
 
-		tmp_x += dir_x[i];
-		tmp_y += dir_y[i];
+		for (int i = 0; i < 4; i++)
+		{
+			int tmp_x = x;
+			int tmp_y = y;
 
-		if (!canGO(tmp_x, tmp_y))
-			continue;
-		spread(tmp_x, tmp_y,vec);
+			tmp_x += dir_x[i];
+			tmp_y += dir_y[i];
 
+			if (!canGO(tmp_x, tmp_y))
+				continue;
+			spread(tmp_x, tmp_y);
+		}
 	}
 }
 
-void buildWall(int x, int y)
+void buildWall()
 {
-	if(!canGO(x,y))
-		return;
-
 	int cnt = 0;
+	int size = 0;
+	int coord = 0;
 
-	map[x][y] = VISITED;
-	
-	vector< vector<int> > cp_map(9, vector <int>(9,0)); 
-	copy(map.begin(),map.end(),cp_map.begin());
+	queue <int> que;
 
-	que.push(10 * x + y);
-	
-	while (cnt != 3)
-	{
-		
-		int size = que.size();
-		while(size--)
-		{
-
-			int coord = que.front();
-			
-			que.pop();
-
-			int tmp_x = coord / 10;
-			int tmp_y = coord % 10;
-			if(!canGO(tmp_x,tmp_y))
-					return;
-			for(int i = 0 ; i<3;i++)
+	for (int i = 1; i <= N; i++)
+		for (int j = 1; j <= M; j++)
+			if (map[i][j] == PATH)
 			{
+				map[i][j] = WALL;
+				que.push(10 * i + j);
+			}
+
+	while (!que.empty())
+	{
+		if (cnt == 3)
+		{
+			for (int i = 1; i <= N; i++)
+				for (int j = 1; j <= M; j++)
+					if (map[i][j] == VIRUS)
+						spread(i, j);
+			int domain = checkDomain();
+			if (u_max < domain)
+				u_max = domain;
+			copyMap();
+		}
+
+		size = que.size();
+		int coord = que.front();
+		int x = coord / 10;
+		int y = coord % 10;
+
+		while (size--)
+		{
+			int tmp_x = x;
+			int tmp_y = y;
+
+			for (int i = 0; i < 4; i++)
+			{
+				tmp_x = x;
+				tmp_y = y;
+
 				tmp_x += dir_x[i];
 				tmp_y += dir_y[i];
 
-				cp_map[tmp_x][tmp_y] = VISITED;
-				que.push(tmp_x*10+tmp_y);
+				if (tmp_x <= 0 || tmp_y <= 0 || tmp_x > N || tmp_y > M)
+					return;
+
+				map[tmp_x][tmp_y] = WALL;
+				que.push(tmp_x * 10 + tmp_y);
+				
 			}
+
 		}
 		cnt++;
 	}
-
-//	spread(1,1,cp_map);
-
-	printf("\n\n");
-	for (int i = 1; i <= N; i++)
-	{
-		for (int j = 1; j <= M; j++)
-		{
-			printf("%d", cp_map[i][j]);
-		}
-		printf("\n");
-	}
-
-	maxScope.push_back(checkDomain(cp_map));
 }
+
 
 int main()
 {
-	int map_;
 	scanf("%d%d", &N, &M);
 	for (int i = 1; i <= N; i++)
 	{
 		for (int j = 1; j <= M; j++)
 		{
-			
-			scanf("%d", &map_);
-			map[i][j]=map_;
+			scanf("%d", &map[i][j]);
 		}
 	}
 
-	for (int j=1; j<=M;j++)
+	copyMap();
+
+	for (int i = 1; i <= N; i++)
 	{
-		buildWall(1,j);
-
+		for (int j = 1; j <= M; j++)
+		{
+			if(map[i][j] == VIRUS)
+				spread(i, j);
+		}
 	}
-	cout<< maxScope.size();
-//	printf("%d",*max_element(maxScope.begin(), maxScope.end()));
 
-	/*
 	printf("\n\n");
 	for (int i = 1; i <= N; i++)
 	{
@@ -153,7 +182,6 @@ int main()
 		}
 		printf("\n");
 	}
-	*/
 
 	return 0;
 }
