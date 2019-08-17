@@ -5,53 +5,62 @@
 #include <vector>
 
 using namespace std;
-bool flag = false;
-int answer = 0;
-string braceStr = "";
 
-int calcBrace(int idx, vector <char> & braceV){
-	if(idx >= braceStr.size()){
-		if(braceV.empty()==false){
-			return -20000000;
-		}
-		else{
-			return 0;
-		}
-	}
+int main()
+{
+	string braceStr = "";
+	vector<char> braceVec;
+	long long answer = 0;
+	long long tmpValue = 1;
 
-	if(braceStr[idx] == '('){
-		braceV.push_back(braceStr[idx]);
-		return 2*calcBrace(idx+1,braceV);
-	}
-
-	else if(braceStr[idx] == ')'){
-		if((braceV.empty()== true)||(braceV.back()!= '(')){
-			return -20000000;
-		}
-		else{
-			braceV.pop_back();
-			return 1*calcBrace(idx+1,braceV);
-		}
-	}
-	else if (braceStr[idx] == '['){
-		braceV.push_back(braceV[idx]);
-		return 3*calcBrace(idx+1,braceV);
-	}else if(braceStr[idx] == ']'){
-		if((braceV.empty()== true)||(braceV.back()!= '(')){
-			return -20000000;
-		}
-		else{
-			braceV.pop_back();
-			return 1*calcBrace(idx+1,braceV);
-		}
-	}
-}
-
-int main(){
-	vector <char> braceVec;
 	cin >> braceStr;
-	int answer = calcBrace(0,braceVec);
-	answer = answer < 0 ? 0 : answer;
-	cout << answer<<"\n";
+
+	for (int idx = 0; idx < (int)braceStr.size(); idx++)
+	{
+		if ((braceStr[idx] == '('))
+		{
+			braceVec.push_back('(');
+			tmpValue *= 2;
+		}
+		else if ((braceStr[idx] == ')'))
+		{
+			if ((braceVec.empty()) || (braceVec.back() != '('))
+			{
+				answer = 0;
+				break;
+			}
+			else
+			{
+				if(braceStr[idx-1]=='('){
+					answer += tmpValue;
+				}
+				braceVec.pop_back();
+				tmpValue /= 2;
+			}
+		}
+		else if ((braceStr[idx] == '['))
+		{
+			braceVec.push_back('[');
+			tmpValue *= 3;
+		}
+		else if ((braceStr[idx] == ']'))
+		{
+			if ((braceVec.empty()) || (braceVec.back() != '['))
+			{
+				answer = 0;
+				break;
+			}
+			else
+			{
+				if(braceStr[idx-1]=='['){
+					answer += tmpValue;
+				}
+				braceVec.pop_back();
+				tmpValue /= 3;
+			}
+		}
+	}
+	answer = (braceVec.empty() ? answer: 0);
+	cout << answer << "\n";
 	return 0;
 }
