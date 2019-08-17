@@ -61,6 +61,6 @@ int main()
 		}
 	}
 	answer = (braceVec.empty() ? answer: 0);
-	cout << answer << "\n";
+	cout << answer;
 	return 0;
 }
