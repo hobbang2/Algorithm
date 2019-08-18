@@ -3,10 +3,12 @@
 
 using namespace std;
 
-int N,M,K;
-long long nums[1000001];
+typedef long long ll;
 
-long long makeTree(int start,int end,int node,vector <long long> & tree){
+int N,M,K;
+ll nums[1000001];
+
+ll makeTree(int start,int end,int node,vector <ll> & tree){
     if(start == end){
         return tree[node]= nums[start];
     }
@@ -14,7 +16,7 @@ long long makeTree(int start,int end,int node,vector <long long> & tree){
     return tree[node] = makeTree(start,mid,node*2,tree) + makeTree(mid+1,end,node*2+1,tree);
 }
 
-long long getSum(int start,int end,int node,long long left, long long right,vector <long long> & tree){
+ll getSum(int start,int end,int node,ll left, ll right,vector <ll> & tree){
     if(left > end || right < start){
         return 0;
     }
@@ -25,7 +27,7 @@ long long getSum(int start,int end,int node,long long left, long long right,vect
     return getSum(start,mid,node*2,left,right,tree)+getSum(mid+1,end,node*2+1,left,right,tree);
 }
 
-void updateValue(int start,int end,int node,long long idx,long long modifyValue,vector <long long> & tree){
+void updateValue(int start,int end,int node,ll idx,ll modifyValue,vector <ll> & tree){
     if(idx < start || idx > end){
         return;
     }
@@ -36,14 +38,13 @@ void updateValue(int start,int end,int node,long long idx,long long modifyValue,
     int mid  = (start+end)/2;
     updateValue(start,mid,node*2,idx,modifyValue,tree);
     updateValue(mid+1,end,node*2+1,idx,modifyValue,tree);
-
 }
 
 
 int main(){
     scanf("%d %d %d",&N,&M,&K);
     int locatedSpace = 4*N;
-    vector <long long> Tree(locatedSpace,0);
+    vector <ll> Tree(locatedSpace,0);
     
     for(int idx = 0; idx < N;idx++){
         scanf("%lld",&nums[idx]);
@@ -55,7 +56,7 @@ int main(){
 
     while(cnt--){
         int order = 0;
-        long long idx[2] = {0,};
+        ll idx[2] = {0,};
         scanf("%d %lld %lld",&order,&idx[0],&idx[1]);
         idx[0]--;
         switch(order){
@@ -64,7 +65,7 @@ int main(){
                 printf("%lld\n",getSum(0,N-1,1,idx[0],idx[1],Tree));
                 break;
             case 1:
-                long long diff = idx[1]-nums[idx[0]];
+                ll diff = idx[1]-nums[idx[0]];
                 nums[idx[0]] = idx[1];
                 updateValue(0,N-1,1,idx[0],diff,Tree);
         }
