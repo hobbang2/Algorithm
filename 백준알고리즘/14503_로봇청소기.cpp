@@ -7,6 +7,7 @@ using namespace std;
 enum {PATH,WALL,DONE=7};
 
 int N,M;
+int ans;
 int map[51][51] = {0,};
 int dir_x[4] = {0,1,0,-1};
 int dir_y[4] = {-1,0,1,0};
@@ -30,33 +31,16 @@ bool canRobotGo(int y,int x){
     return false;
 }
 
-int cntCleanArea(){
-    int cnt = 0;
-    printf("\n\n");
-    for(int y= 0 ; y< N; y++){
-        for(int x=  0; x <M; x++){
-            printf("%d ",map[y][x]);
-            if(map[y][x] == DONE){
-                cnt++;
-            }
-        }
-        printf("\n");
-    }
-    return cnt;
-}
-
-void changeDir(Coord & curRobot){
-    curRobot.dir = (curRobot.dir - 1 < 0) ? (curRobot.dir + 3) : (curRobot.dir - 1);
-}
-
 void StartCleaning(Coord & curRobot){
     for(;;){
-        map[curRobot.y][curRobot.x] = DONE;
+        if(map[curRobot.y][curRobot.x] == PATH){
+            map[curRobot.y][curRobot.x] = DONE;
+            ans++;
+        }
         bool cleaning = false;
         int initDir = curRobot.dir;
-        int cnt = 0;
 
-        for(; cnt < 4; cnt ++){
+        for(int cnt =0; cnt < 4; cnt ++){
             int next_dir = (curRobot.dir - 1 < 0) ? (curRobot.dir + 3) : (curRobot.dir - 1);
 
             int next_y = curRobot.y + dir_y[next_dir];
@@ -108,7 +92,6 @@ int main(){
     }
     
     StartCleaning(robot);
-    int ans = cntCleanArea();
     printf("%d\n",ans);
     return 0;
 }
