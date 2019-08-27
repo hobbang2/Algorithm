@@ -35,7 +35,7 @@ int isCross(Coord & c1, Coord & c2, Coord & c3, Coord & c4){
     int CD = getCCW(c3,c4,c1)*getCCW(c3,c4,c2);
     if(c2 < c1) swap(c1,c2);
     if(c4 < c3) swap(c3,c4);
-    if((AB == 0) &&( CD == 0)){
+    if((AB == 0) &&(CD == 0)){
         if(((c1 < c3)&&(c2 < c3))||((c4 < c2) && (c4 < c1))){
             return false;
         }
