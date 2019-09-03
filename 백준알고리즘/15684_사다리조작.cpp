@@ -12,19 +12,14 @@ bool startGame(){
     int curY = 1; 
     int curX = 1;
     for(int x = 1; x <=N; x++){
-        vector <vector <bool> > check(31,vector<bool> (11,false));
-        curY = 1;
         curX = x;
-        while(curY <= H){
-            if(map[curY][curX] > 0){
-                if(map[curY][curX-1] == map[curY][curX]){
-                    curX = curX-1;
-                }
-                else if(map[curY][curX+1] == map[curY][curX]){
-                    curX = curX+1;
-                }
+        for(int y = 1; y<= H;y++){
+            if(map[y][curX] == 1){
+                curX+=1;
             }
-            curY = curY+1;
+            else if(map[y][curX-1]==1){
+                curX-=1;
+            }
         }
         if(curX != x){
             return false;
@@ -38,7 +33,9 @@ void takeBridge(int idx, int cnt, int targetCnt){
         return;
     }
     if(cnt == targetCnt){
-        if(startGame()){
+        bool ans = startGame();
+        if(ans == true){
+            
             if((answer > targetCnt)){
                 answer = targetCnt;
             }
@@ -47,12 +44,10 @@ void takeBridge(int idx, int cnt, int targetCnt){
     }
     for(int y = idx ; y<=H;y++){
         for(int x = 1 ; x <=N-1;x++){
-            if((map[y][x] == 0)&&(map[y][x+1]== 0)){
-                map[y][x] = x+100;
-                map[y][x+1] = x+100;
+            if((map[y][x] == 0)&&(map[y][x+1]== 0)&&(map[y][x-1])==0){
+                map[y][x] = 1;
                 takeBridge(y,cnt+1,targetCnt);
                 map[y][x] = 0;
-                map[y][x+1] = 0;
             }
         }
     }
@@ -70,8 +65,7 @@ int main(){
         for(int m = 1; m <=M;m++)
         {
             scanf("%d %d",&a,&b);
-            map[a][b] = b;
-            map[a][b+1] = b;
+            map[a][b] = 1;
         }
             takeBridge(1,0,0);
             takeBridge(1,0,1);
