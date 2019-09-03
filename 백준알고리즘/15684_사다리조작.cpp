@@ -44,7 +44,7 @@ void takeBridge(int idx, int cnt, int targetCnt){
     }
     for(int y = idx ; y<=H;y++){
         for(int x = 1 ; x <=N-1;x++){
-            if((map[y][x] == 0)&&(map[y][x+1]== 0)&&(map[y][x-1])==0){
+            if((map[y][x] == 0)&&(map[y][x+1]== 0)&&(map[y][x-1]==0)){
                 map[y][x] = 1;
                 takeBridge(y,cnt+1,targetCnt);
                 map[y][x] = 0;
