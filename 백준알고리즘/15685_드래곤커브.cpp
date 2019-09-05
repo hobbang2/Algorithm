@@ -19,6 +19,7 @@ void initVector(vector <int> & targetVec) {
 
 void makeDragonCurve(int dir, int generation) {
 	dragonCurve.push_back(dir);
+	// gene이 0부터 시작하면 maxGeneration 이 0세대 일 때도 1세대 마냥 .. 
 	for (int gene = 1; gene <= generation; gene++) {
 		int curveSize = (int)dragonCurve.size();
 		for (int idx = curveSize-1; idx >= 0; idx--) {
