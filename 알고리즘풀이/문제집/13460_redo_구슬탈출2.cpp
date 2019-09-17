@@ -25,15 +25,16 @@ int dir_x[4] = { -1,0,1,0 };
 int dir_y[4] = { 0,1,0,-1 };
 int answer = 11;
 
-void mapCheck(int N, int M) {
-	for (int y = 1; y <= N; y++) {
-		for (int x = 1; x <= M; x++) {
-			printf("%c", map[y][x]);
+void MoveEachBall(Ball & curBall, int dy, int dx) {
+	while (map[curBall.y][curBall.x] != '#') {
+		curBall.y = curBall.y + dy;
+		curBall.x = curBall.x + dx;
+		if (map[curBall.y][curBall.x] == 'O') {
+			curBall.gettingHall = true;
+			break;
 		}
-		printf("\n");
 	}
 }
-
 void moveBall(Ball & blue, Ball & red, int dy, int dx) {
 	int blueMovingDist = 0;
 	int redMovingDist = 0;
@@ -41,41 +42,23 @@ void moveBall(Ball & blue, Ball & red, int dy, int dx) {
 	int cur_y = blue.y;
 	int cur_x = blue.x;
 
-    // blue 공 옮기기
-	while (map[cur_y][cur_x] != '#') {
-		cur_y = cur_y + dy;
-		cur_x = cur_x + dx;
-		if (map[cur_y][cur_x] == 'O') {
-			blue.y = cur_y;
-			blue.x = cur_x;
-			blue.gettingHall = true;
-			break;
-		}
-	}
+	MoveEachBall(blue, dy, dx);
+
 	if (blue.gettingHall != true) {
 		blueMovingDist = abs(cur_y - blue.y) + abs(cur_x - blue.x);
-		blue.y = cur_y - dy;
-		blue.x = cur_x - dx;
+		blue.y = blue.y - dy;
+		blue.x = blue.x - dx;
 	}
 
 	cur_y = red.y;
 	cur_x = red.x;
 
-    // red 공 옮기기
-	while (map[cur_y][cur_x] != '#') {
-		cur_y = cur_y + dy;
-		cur_x = cur_x + dx;
-		if (map[cur_y][cur_x] == 'O') {
-			red.y = cur_y;
-			red.x = cur_x;
-			red.gettingHall = true;
-			break;
-		}
-	}
+	MoveEachBall(red,dy,dx);
+
 	if (red.gettingHall != true) {
 		redMovingDist = abs(cur_y - red.y) + abs(cur_x - red.x);
-		red.y = cur_y - dy;
-		red.x = cur_x - dx;
+		red.y = red.y - dy;
+		red.x = red.x - dx;
 	}
 
 	if ((red.y == blue.y) && (red.x == blue.x)) {
@@ -116,7 +99,6 @@ void gameStart(Ball & blue, Ball & red, int cnt) {
 		moveBall(nextBlue, nextRed, dir_y[d], dir_x[d]);
 		int blueDist = abs(blue.y - nextBlue.y) + abs(blue.x - nextBlue.x);
 		int redDist = abs(red.y - nextRed.y) + abs(red.x - nextRed.x);
-        // 지난 번이랑 비교해서 안움직였으면 방향바꾸기
 		if ((blueDist == 0) && (redDist == 0) && (nextBlue.gettingHall == false) && (nextRed.gettingHall == false)) {
 			continue;
 		}
