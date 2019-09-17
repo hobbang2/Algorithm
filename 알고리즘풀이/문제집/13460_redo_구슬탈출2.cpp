@@ -40,8 +40,8 @@ void moveBall(Ball & blue, Ball & red, int dy, int dx) {
 
 	int cur_y = blue.y;
 	int cur_x = blue.x;
-	// map[cur_y][cur_x] = '.';
 
+    // blue 공 옮기기
 	while (map[cur_y][cur_x] != '#') {
 		cur_y = cur_y + dy;
 		cur_x = cur_x + dx;
@@ -61,6 +61,7 @@ void moveBall(Ball & blue, Ball & red, int dy, int dx) {
 	cur_y = red.y;
 	cur_x = red.x;
 
+    // red 공 옮기기
 	while (map[cur_y][cur_x] != '#') {
 		cur_y = cur_y + dy;
 		cur_x = cur_x + dx;
@@ -115,6 +116,7 @@ void gameStart(Ball & blue, Ball & red, int cnt) {
 		moveBall(nextBlue, nextRed, dir_y[d], dir_x[d]);
 		int blueDist = abs(blue.y - nextBlue.y) + abs(blue.x - nextBlue.x);
 		int redDist = abs(red.y - nextRed.y) + abs(red.x - nextRed.x);
+        // 지난 번이랑 비교해서 안움직였으면 방향바꾸기
 		if ((blueDist == 0) && (redDist == 0) && (nextBlue.gettingHall == false) && (nextRed.gettingHall == false)) {
 			continue;
 		}
