@@ -1,7 +1,8 @@
 *.exe
 .vscode/
 .vs/
-.KAKAO/
-.NHN/
-.NAVER/
+KAKAO/
+NHN/
+NAVER/
+2019_하반기_라인/
 tempCodeRunnerFile.cpp
