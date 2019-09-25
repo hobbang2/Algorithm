@@ -125,9 +125,7 @@ int main(){
             }
         }
     }
-    // cnt가 2부터 시작했으므로 원점으로 돌려주기
-    cnt -=2;
-
+ 
     // 다리를 찾습니다. 
     for(int y = 1; y <= N; y++){
         for(int x= 1; x <= M; x++){
@@ -164,6 +162,10 @@ int main(){
             UNION(edgeSet[idx].y,edgeSet[idx].x);
         }
     }
+    
+    // cnt가 2부터 시작했으므로 원점으로 돌려주기
+    cnt -=2;
+
     // 선택된 edge의 수는 node의 수 -1
     if(nodeCnt != (cnt-1)){
         answer = -1;
