@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-#include <set>
 
 using namespace std;
 
@@ -13,11 +12,8 @@ int dirX[4] = {1,-1,0,0};
 int dirY[4] = {0,0,1,-1};
 
 int map[11][11];
-vector <vector<int> > vec(11,vector<int> (11,0));
-vector <vector<int> > weightMap(12,vector <int> (12,INF));
 int parent[12];
-int rootSize[12];
-
+vector <vector<int> > weightMap(12,vector <int> (12,INF));
 
 typedef struct Edge{
     int y,x;
@@ -101,7 +97,7 @@ void findBridge(int curIsland,int y,int x,int dY,int dX,int cnt){
     }
     else{
         int nextIsland = map[y][x];
-        if((cnt!= 1 )&& (weightMap[curIsland][nextIsland] > cnt)){
+        if((cnt!= 1)&&(weightMap[curIsland][nextIsland] > cnt)){
             weightMap[curIsland][nextIsland] = cnt;
             weightMap[curIsland][nextIsland] = cnt;
         }
