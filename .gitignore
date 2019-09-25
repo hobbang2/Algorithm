@@ -1,5 +1,7 @@
 *.exe
 .vscode/
 .vs/
-tempCodeRunnerFile.cpp
 .KAKAO/
+.NHN/
+.NAVER/
+tempCodeRunnerFile.cpp
