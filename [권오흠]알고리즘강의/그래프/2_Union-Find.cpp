@@ -18,22 +18,41 @@ int getParent(int target){
     }
 }
 
-void UNION(int target1, int target2){
-    int targetParent[2] = {getParent(target1),getParent(target2)};
-    if(targetParent[0] < targetParent[1]){
-        rootArr[target2] = targetParent[0];
-    }
-    else{
-        rootArr[target1] = targetParent[1];
-    }
+void UNION(int target1, int target2) {
+	int targetParent[2] = { getParent(target1),getParent(target2) };
+	if (targetParent[0] < targetParent[1]) {
+		rootArr[targetParent[1]] = targetParent[0];
+	}
+	else {
+		rootArr[targetParent[0]] = targetParent[1];
+	}
 }
 
-bool FIND(int target1, int target2){
-    if(rootArr[target1] == rootArr[target2]){
-        return true;
-    }
-    return false;
+// 아래 코드가 왜 안되는 것인지 꼭 알아야합니다.!_! 
+// void UNION(int target1, int target2){
+//     int targetParent[2] = {getParent(target1),getParent(target2)};
+//     if(targetParent[0] < targetParent[1]){
+//         rootArr[target2] = targetParent[0];
+//     }
+//     else{
+//         rootArr[target1] = targetParent[1];
+//     }
+// }
+
+bool FIND(int target1, int target2) {
+	if (getParent(target1) == getParent(target2)) {
+		return true;
+	}
+	return false;
 }
+
+
+// bool FIND(int target1, int target2){
+//     if(rootArr[target1] == rootArr[target2]){
+//         return true;
+//     }
+//     return false;
+// }
 
 int N,M;
 void initRootArr(int size){

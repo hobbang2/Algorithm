@@ -53,4 +53,44 @@ A가 어떤 MST의 부분집합이고, (S,V-S)는 edge 집합 A에 의해 respec
 > 슈도코드 `22'26''`  
  
 ## [15-3강 : Kruskal 구현](https://www.youtube.com/watch?v=_ocho3EzDH4&list=PL52K_8WQO5oUuH06MLOrah4h05TZ4n38l&index=36)
-## []()
+`가장 적은 비용`으로 `모든 노드`를 연결한다!_!  
+- `edge`들을 weight가 작은 것부터 큰 것을 순서대로 보면서  
+- 어떤 edge `u`,`v`에 대해 서로 속한 집합이 다른지 // 사이클을 만드는지 검사  
+- 사이클을 형성하지 않으면 `u` union `v`  
+
+> Find algorithm 은 tree의 높이에 비례하는 시간 복잡도를 가진다.  
+=> Weighted Union : 두 개의 tree를 union 할 때 작은 tree의 root를 큰 tree의 root의 자식으로 만들자!  
+// 각 tree의 노드의 수를 counting 하고 있어야한다 ^_^  
+=> node의 수가 N개 일 때, 이 tree의 level의 maximum 값은 `log N`  
+
+> Path Compression : Find 할 때  
+```cpp
+// FIND-SET-PC(x)
+while x != p[x] do
+    p[x] <- p[p[x]];
+    x <- p[x];
+end.
+return p[x];
+```
+
+> WUPC(Weight Union & Path Compression) - M번의 union-find 연산의 총 시간복잡도는 O(N+Mlog*N)  
+log*N = (log log log log...logN)  
+log*N = N에 log를 몇 번 취하면 1이 되는지에 대한 횟수 !  
+예) N이 4이면 log*4 = 2  
+N이 16이면 log*16 = 3  
+log*N이 4가 되려면 N은 2^16  
+log*N이 5보다 커질 일은 없을거셈 !  
+왜냐하면 log*N = 5이려면 N= 2^65536  
+
+> kruskal Algorithm : O(|E|log|E|)  정렬 알고리즘의 시간복잡도에 의해 결정됨 !  
+// 노드가 n 개 일 때 edge의 수 |E|는 최대 (n)(n-1)/2 개  
+따라서 시간 복잡도는 `O(NlogN)`  
+
+```
+Initial A : O(1)  
+First for loop : |V| make-sets  
+sort E : O(|E|log|E|)  
+second for loop : O(|E|) FIND-SETs and UNIONs  
+```
+
+## [15-4강 : Prim의 알고리즘](https://www.youtube.com/watch?v=n9kjPc_W_rc&list=PL52K_8WQO5oUuH06MLOrah4h05TZ4n38l&index=37)
