@@ -129,6 +129,8 @@ int main(){
             }
         }
     }
+    // cnt가 2부터 시작했으므로 원점으로 돌려주기
+    cnt -=2;
 
     // 다리를 찾습니다. 
     for(int y = 1; y <= N; y++){
@@ -157,28 +159,19 @@ int main(){
 
     int numOfEdge = (int)edgeSet.size();
     int answer = 0;
-
-    vector <bool> nodeCheck(cnt,false);
-    // set <int> nodeIdx;
+    
+    int nodeCnt = 0;
     for(int idx = 0; idx < numOfEdge;idx++){
         if(FIND(edgeSet[idx].y,edgeSet[idx].x)==false){
-            nodeCheck[edgeSet[idx].y] = true;
-            nodeCheck[edgeSet[idx].x] = true;
-            // nodeIdx.insert(edgeSet[idx].y);
-            // nodeIdx.insert(edgeSet[idx].x);
+            nodeCnt +=1;
             answer += edgeSet[idx].weight;
             UNION(edgeSet[idx].y,edgeSet[idx].x);
         }
     }
-    for(int idx = 2; idx < cnt ; idx ++){
-        if(nodeCheck[idx]==false){
-            answer = -1;
-            break;
-        }
+    // 선택된 edge의 수는 node의 수 -1
+    if(nodeCnt != (cnt-1)){
+        answer = -1;
     }
-    // if(nodeIdx.size()!= (cnt-2)){
-    //     answer = -1;
-    // }
     printf("%d\n",answer);
     return 0;
 }
