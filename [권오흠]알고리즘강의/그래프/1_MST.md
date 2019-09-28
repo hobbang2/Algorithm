@@ -75,8 +75,10 @@ return p[x];
 
 > WUPC(Weight Union & Path Compression) - M번의 union-find 연산의 총 시간복잡도는 O(N+Mlog*N)  
 log*N = (log log log log...logN)  
-log*N = N에 log를 몇 번 취하면 1이 되는지에 대한 횟수 !  
-예) N이 4이면 log*4 = 2  
+log*N = N에 log를 몇 번 취하면 1이 되는지에 대한 횟수 ! 
+
+> 예)  
+N이 4이면 log*4 = 2  
 N이 16이면 log*16 = 3  
 log*N이 4가 되려면 N은 2^16  
 log*N이 5보다 커질 일은 없을거셈 !  
@@ -94,3 +96,73 @@ second for loop : O(|E|) FIND-SETs and UNIONs
 ```
 
 ## [15-4강 : Prim의 알고리즘](https://www.youtube.com/watch?v=n9kjPc_W_rc&list=PL52K_8WQO5oUuH06MLOrah4h05TZ4n38l&index=37)
+- `임의의 노드`를 출발노드로 선택  
+- `출발 노드`를 포함하는 트리를 점점 키워가자. 
+- 매 단계에서 `이미 포함된 노드`와 `포함되지 않은 노드`를 연결하는 에지들 중 가장 가중치가 `작은` 에지를 선택
+- 모든 노드들이 연결되면 알고리즘 종료 ^_^ 
+
+### 왜 MST 가 찾아지는가 ? 
+> [7'49''](https://youtu.be/n9kjPc_W_rc?list=PL52K_8WQO5oUuH06MLOrah4h05TZ4n38l&t=483)
+
+### 어떻게 구현할 것인가 ? 
+> `이미 포함된 노드`와 `포함되지 않은 노드`를 연결하는 에지들 중 가장 가중치가 `작은` 에지를 찾는 것이 중요!  
+에지를 찾는 데에 최악의 경우 O(N^2)  
+아무 생각없이 구현하면 Prim의 알고리즘은 O(N^3)  
+
+> 가중치가 최소인 에지 찾기  
+
+- Va : 이미 트리에 포함된 노드들  
+- Va에 아직 속하지 않은 `각 노드` v에 대해 다음과 같은 값을 유지하자.  
+    + key(v) : 이미 Va에 속한 노드와 자신을 연결하는 에지들 중 가중치가 최소인 에지 (u,v)의 가중치  
+    + pi(v) : 그 에지 (u,v)의 끝점 u  
+key값이 최소인 것을 찾아서 연결하면 됨 !//O(N)  
+
+> key값을 계산하는 데에 걸리는 시간은 얼마일까 ?  
+- 필요한 key값을 갱신만 해주면 된다. // 새로 Va에 속하게 된 노드와 연결된 것들만 갱신하면 됨.  
+- O(N)
+
+=> 1 step : O(N) , (n-1) * O(N) = O (N^2)  
+
+// 인접행렬이나 인접리스트에 관계없이 O(n^2)
+```cpp
+MST-Prim(G,w,r) : O(N^2)
+  for each u in V do
+      key[u]<- inf
+      pi[u] <- NIL
+  end
+  Va <- {r}
+  key[r] <- 0
+  // n-1 번 반복합니다. 
+  while `|Va| < n` do
+  // 최소값 찾기 O(N) 
+      find u not in Va with the `minimum key` value;
+      Va <- Va union {u}
+  // degree(u) = O(N)
+      for each v not in Va adjacent to u do
+          if `key[v] > w(u,v)` then
+              key[v] <- w(u,v) then
+              pi[v] <- u
+          end.
+      end.
+  end.
+```
+
+> 효과적인 Prim의 알고리즘 구현을 위해서는 !?  
+- `최소 우선순위 큐`를 이용하자. 
+- V-Va에 속한 노드들을 저장  
+- `Extract-Min` : key값이 최소인 노드를 삭제 후 반환  
+
+```cpp
+MST-PRIM(G,w,r)
+  for each u in V[G]
+      do key[u] <- INF
+         pi[u] <- NIL
+  key[r] <- 0
+  Q <- V[G]
+  while Q is not empty set
+      do u <- EXTRACT-MIN(Q)
+          for each v in Adj[u]
+              do if v in Q and w(u,v) < key[v]
+                  then pi[v] <- u
+                      key[v] <- w(u,v)
+```
