@@ -95,6 +95,7 @@ sort E : O(|E|log|E|)
 second for loop : O(|E|) FIND-SETs and UNIONs  
 ```
 
+// 밀도가 높은 그래프에 적절합니당
 ## [15-4강 : Prim의 알고리즘](https://www.youtube.com/watch?v=n9kjPc_W_rc&list=PL52K_8WQO5oUuH06MLOrah4h05TZ4n38l&index=37)
 - `임의의 노드`를 출발노드로 선택  
 - `출발 노드`를 포함하는 트리를 점점 키워가자. 
@@ -153,16 +154,21 @@ MST-Prim(G,w,r) : O(N^2)
 - `Extract-Min` : key값이 최소인 노드를 삭제 후 반환  
 
 ```cpp
-MST-PRIM(G,w,r)
+MST-PRIM(G,w,r) : O(mlogN)
   for each u in V[G]
       do key[u] <- INF
          pi[u] <- NIL
   key[r] <- 0
+  // 시작 노드의 값을 먼저 하나 넣어줌 
   Q <- V[G]
   while Q is not empty set
       do u <- EXTRACT-MIN(Q)
           for each v in Adj[u]
               do if v in Q and w(u,v) < key[v]
                   then pi[v] <- u
+  // key 값을 update 한다 
+  // heap은 data의 크기에 관한 조건을 만족해야하므로 heapify 연산이 필요함 
+  // O(logN) , 전체는 sum of deree of (V) = m 번 실행된다
                       key[v] <- w(u,v)
 ```
+- Fibonacci 힙을 사용하면 O(m+NlogN)에 구현 할 수 있다.  
