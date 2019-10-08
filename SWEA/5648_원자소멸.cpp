@@ -1,171 +1,114 @@
 #include <cstdio>
 #include <vector>
-#include <utility>
-#include <set>
 
 using namespace std;
 
-enum {UP,DOWN,LEFT,RIGHT,RESULT};
-int dir_y[4] = { -1,1,0,0 };
-int dir_x[4] = { 0,0,-1,1 };
-
+vector <vector <int> > map(4001,vector <int> (4001,0));
 typedef struct Atom {
-	int y, x;
-	int energy;
+	int y, x; 
 	int dir;
+	int energy;
 	bool collision;
-	Atom(int _y = 0, int _x = 0, int _energy = 0,int _dir=0, bool _collision = false) :y(_y), x(_x), energy(_energy),dir(_dir), collision(_collision) {}
-};
-vector <Atom> atoms[5];
-
-void initVec(vector <Atom> vec[]) {
-	for (int idx = 0; idx < 5; idx++) {
-		vector <Atom> emptyVec;
-		vec[idx].swap(emptyVec);
+	Atom(int _y = 0, int _x = 0, int _d = 0, int _e = 0, int _c = false)
+		:y(_y), x(_x), dir(_d),energy(_e), collision(_c) {
 	}
+}Atom;
+
+int dir_y[4] = { 1,-1,0,0 };
+int dir_x[4] = { 0,0,-1,1 };
+vector <Atom> atoms;
+
+void mapCleaning(){
+    for(int idx = 0; idx < (int)atoms.size();idx++){
+        if(map[atoms[idx].y][atoms[idx].x]!=0){
+            map[atoms[idx].y][atoms[idx].x]=0;
+        }
+    }
+}
+int getEnergy( int & numOfAtom) {
+	int N = (int)atoms.size();
+	int energy = 0;
+	for (int n = 0; n < N; n++) {
+		Atom curAtom = atoms[n];
+		if (curAtom.collision == true) {
+			continue;
+		}
+		if (map[curAtom.y][curAtom.x] > 1) {
+			for (int idx = 0; idx < N; idx++) {
+				if ((n==idx)||(atoms[idx].collision == true)) {
+					continue;
+				}
+				if ((curAtom.y == atoms[idx].y) &&(curAtom.x == atoms[idx].x)) {
+					atoms[idx].collision = true;
+					numOfAtom -= 1;
+					energy += atoms[idx].energy;
+				}
+			}
+			numOfAtom -= 1;
+			map[curAtom.y][curAtom.x] = 0;
+			energy += curAtom.energy;
+			atoms[n].collision = true;
+		}
+	}
+	return energy;
 }
 
-void upAndDown(vector <Atom> & up, vector <Atom> & down) {
-	int upSize = (int)up.size();
-	int downSize = (int)down.size();
-	for (int u = 0; u < upSize; u++) {
-		for (int d = 0; d < downSize; d++) {
-			if ((up[u].collision == true) &&(down[d].collision == true)) {
+void startCollision(int numOfAtom,int & answer) {
+	int N = (int)atoms.size();
+	for (;;) {
+		if (numOfAtom <= 1) {
+            mapCleaning();
+			break;
+		}
+		for (int idx = 0; idx < N; idx++) {
+			// 이미 붕괴했으면 다음거 보기
+			if (atoms[idx].collision == true) {
 				continue;
 			}
-			if ((up[u].x == down[d].x) && (down[d].y >= up[u].y)) {
-				up[u].collision = true;
-				down[d].collision = true;
+			Atom curAtom = atoms[idx];
+			map[curAtom.y][curAtom.x] = 0;
+			int next_y = curAtom.y + dir_y[curAtom.dir];
+			int next_x = curAtom.x + dir_x[curAtom.dir];
+			// 범위 벗어났으면 ㅂ2
+			if (next_y < 0 || next_x < 0 || next_y > 4000 || next_x > 4000) {
+				atoms[idx].collision = true;
+				numOfAtom -= 1;
+			}
+			else {
+				map[next_y][next_x]+=1;
+				atoms[idx].y = next_y;
+				atoms[idx].x = next_x;
 			}
 		}
+		// map 돌면서 2 보다 크면 원자 돌면서 에너지 방출해야함
+		int tmpEnergy = getEnergy(numOfAtom);
+		answer += tmpEnergy;
 	}
-}
-
-void leftAndRight(vector <Atom> & left, vector <Atom> & right) {
-	int leftSize = (int)left.size();
-	int rightSize = (int)right.size();
-	for (int l = 0; l < leftSize; l++) {
-		for (int r = 0; r < rightSize; r++) {
-			if ((left[l].collision == true) && (right[r].collision == true)) {
-				continue;
-			}
-			if ((left[l].y == right[r].y) && (left[l].x >= right[r].x)) {
-				left[l].collision = true;
-				right[r].collision = true;
-			}
-		}
-	}
-}
-
-void downAndLeft(vector <Atom> & down, vector <Atom> & left) {
-	int downSize = (int)down.size();
-	int leftSize = (int)left.size();
-	for (int d = 0; d < downSize; d++) {
-		for (int l = 0; l < leftSize; l++) {
-			if ((down[d].collision == true) && (left[l].collision == true)) {
-				continue;
-			}
-			int diff_x = left[l].x - down[d].x;
-			int diff_y = down[d].y - left[l].y;
-			if (diff_x == diff_y) {
-				down[d].collision = true;
-				left[l].collision = true;
-			}
-		}
-	}
-}
-
-void downAndRight(vector <Atom> & down, vector <Atom> & right) {
-	int downSize = (int)down.size();
-	int rightSize = (int)right.size();
-	for (int d = 0; d < downSize; d++) {
-		for (int r = 0; r < rightSize; r++) {
-			if ((down[d].collision == true) && (right[r].collision == true)) {
-				continue;
-			}
-			int diff_x = down[d].x - right[r].x;
-			int diff_y = down[d].y - right[r].y;
-			if (diff_x == diff_y) {
-				down[d].collision = true;
-				right[r].collision = true;
-			}
-		}
-	}
-}
-
-void upAndRight(vector <Atom> & up, vector <Atom> & right) {
-	int upSize = (int)up.size();
-	int rightSize = (int)right.size();
-	for (int u = 0; u < upSize; u++) {
-		for (int r = 0; r < rightSize; r++) {
-			if ((up[u].collision == true) && (right[r].collision == true)) {
-				continue;
-			}
-			int diff_x = up[u].x - right[r].x;
-			int diff_y = right[r].y - up[u].y;
-			if (diff_x == diff_y) {
-				up[u].collision = true;
-				right[r].collision = true;
-			}
-		}
-	}
-}
-
-void upAndLeft(vector <Atom> & up, vector <Atom> & left) {
-	int upSize = (int)up.size();
-	int leftSize = (int)left.size();
-	for (int u = 0; u < upSize; u++) {
-		for (int l = 0; l < leftSize; l++) {
-			if ((up[u].collision == true) && (left[l].collision == true)) {
-				continue;
-			}
-			int diff_x = left[l].x - up[u].x;
-			int diff_y = left[l].y - up[u].y;
-			if (diff_x == diff_y) {
-				up[u].collision = true;
-				left[l].collision = true;
-			}
-		}
-	}
-}
-
-int calEnergy(vector <Atom> vec[]) {
-	int answer = 0;
-	for (int dir = 0; dir < 4; dir++) {
-		int vecSize = vec[dir].size();
-		for (int idx = 0; idx < vecSize; idx++) {
-			if (vec[dir][idx].collision == true) {
-				answer += vec[dir][idx].energy;
-			}
-		}
-	}
+	return;
 }
 
 int main() {
 	int T = 0;
-	int numOfAtoms = 0;
+	int N = 0;
+	int answer = 0;
+	int cpyN = 0;
 	scanf("%d", &T);
 	for (int tc = 1; tc <= T; tc++) {
-		int answer = 0;
-		scanf("%d", &numOfAtoms);
-		// 원자 받아오기 
-		for (int idx = 1; idx <= numOfAtoms; idx++) {
-			int y = 0, x = 0, dir = 0, K = 0;
-			scanf("%d %d %d %d", &x, &y, &dir, &K);
-			Atom curAtom(y, x, dir, K);
-			atoms[dir].push_back(curAtom);
+		atoms.clear();
+		answer = 0;
+		scanf("%d", &N);
+		cpyN = N;
+		for (int n = 0; n < N; n++) {
+			Atom curAtom;
+			scanf("%d %d %d %d", &curAtom.x, &curAtom.y, &curAtom.dir, &curAtom.energy);
+			curAtom.y = (curAtom.y + 1000) * 2;
+			curAtom.x = (curAtom.x + 1000) * 2;
+			atoms.push_back(curAtom);
 		}
-		upAndDown(atoms[UP], atoms[DOWN]);
-		upAndLeft(atoms[UP], atoms[LEFT]);
-		upAndRight(atoms[UP], atoms[RIGHT]);
-		downAndLeft(atoms[DOWN], atoms[LEFT]);
-		downAndRight(atoms[DOWN], atoms[RIGHT]);
-		leftAndRight(atoms[LEFT], atoms[RIGHT]);
 
-		
-
+		// cpyN이 0이 될 때 까지 
+		startCollision(cpyN,answer);
 		printf("#%d %d\n", tc, answer);
 	}
-
 	return 0;
 }
