@@ -20,6 +20,7 @@ int getBenefit(const int & n) {
 			incX = 1;
 		}
 		limit = x + curSpace;
+		// 지역변수 사용시 주의 
 		for (int cpyX = x ;cpyX < limit; cpyX++) {
 			benefit += map[y][cpyX];
 		}
