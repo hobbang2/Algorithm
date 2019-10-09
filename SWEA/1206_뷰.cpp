@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <vector>
+#include <algorith>
 
 using namespace std;
 
@@ -13,29 +14,19 @@ void cleanVec() {
 
 // 함수 바꿀 때 return 값 좀 신경써 ㅠ_ㅠ 
 int getViewOk(int curH,int curIdx) {
-	int nextIdx = 0;
-	int nextH = 0;
-	int tmpAns = 0;
-	int answer = 1000001;
-	for(int x = 0; x < 4; x++){
-		nextIdx = curIdx + dx[x];
-		nextH = building[nextIdx];
-		if (nextH >= curH) {
-			return 0;
-		}
-		else {
-			tmpAns = curH - nextH;
-			answer = (tmpAns < answer) ? tmpAns : answer;
-		}
-	}
-	return answer;
+    int maxOfNext = max(max(building[curIdx-2],building[curIdx-1]),max(building[curIdx+1],building[curIdx+2]));
+    int diff = curH -maxOfNext;
+    if(diff > 0){
+        return diff;
+    }
+	return 0;
 }
 
 int main() {
 	int tc = 1;
-	int idx = 0;
 	int num = 0;
 	int n = 0;
+	int idx = 0;
 	int curH = 0;
 	int answer = 0;
 	for (tc = 1; tc <= 10; tc++) {
