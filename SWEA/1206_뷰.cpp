@@ -15,7 +15,7 @@ void cleanVec() {
 // 함수 바꿀 때 return 값 좀 신경써 ㅠ_ㅠ 
 int getViewOk(int curH,int curIdx) {
     int maxOfNext = max(max(building[curIdx-2],building[curIdx-1]),max(building[curIdx+1],building[curIdx+2]));
-    int diff = curH -maxOfNext;
+    int diff = curH - maxOfNext;
     if(diff > 0){
         return diff;
     }
