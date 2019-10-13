@@ -82,7 +82,7 @@ bool startProgramming(int y, int x) {
 						q.push({ nextY,nextX,d });
 					}
 				}
-				break;
+				continue;
 			case '+':
 				memory = (memory == 15) ? 0 : memory + 1;
 				break;
@@ -90,16 +90,15 @@ bool startProgramming(int y, int x) {
 				memory = (memory == 0) ? 15 : memory - 1;
 			}
 		}
-		if (curChar != '?') {
-			curDir = curCoord.dir;
-			nextY = curCoord.y + dirY[curDir];
-			nextX = curCoord.x + dirX[curDir];
-			rangeChk(nextY, nextX);
-			if (visited[nextY][nextX][memory][curDir] == false) {
-				visited[nextY][nextX][memory][curDir] = true;
-				q.push({ nextY,nextX,curDir });
-			}
-		}
+        curDir = curCoord.dir;
+        nextY = curCoord.y + dirY[curDir];
+        nextX = curCoord.x + dirX[curDir];
+        rangeChk(nextY, nextX);
+        if (visited[nextY][nextX][memory][curDir] == false) {
+            visited[nextY][nextX][memory][curDir] = true;
+            q.push({ nextY,nextX,curDir });
+        }
+        // 같은 좌표, 방향, 메모리를 가지는 곳에 방문한 곳이 있으면 무한루프에 빠지는 것이므로 queue에 삽입X
 	}
 	return false;
 }
