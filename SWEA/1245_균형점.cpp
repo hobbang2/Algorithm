@@ -1,84 +1,49 @@
 #include <cstdio>
 // cout  에서 format 지정 출력하는거 검색해보기 
 #include <cmath>
-#include <set>
 #include <map>
 #include <vector>
 
-#define E_VALUE 0.0000000001
+#define E_VALUE 0.0000000000001
 using namespace std;
 
 int N;
-double wholeW;
-set <double> answer;
-vector <bool> check(11, false);
-map<double, double> magnetics;
+map<int,pair <double, double> > magnetics;
 
 void cleaner() {
-	set <double> empty;
-	vector <bool> emptyChk(11, false);
-	map<double, double> emptyMap;
-	wholeW = 0.0;
-	answer.swap(empty);
-	check.swap(emptyChk);
+	map<int, pair< double, double> > emptyMap;
 	magnetics.swap(emptyMap);
 };
 
-void gameStart(int idx, int cnt, int tCnt, vector <double> & vec) {
-	if (idx > N-1 || cnt > N-1) {
-		return;
+void gameStart() {
+	double begin = 0.0, end = 0.0, target = 0.0;
+	for (int orient = 0; orient < N - 1; orient++) {
+		int cnt = 0;
+		begin = magnetics[orient].first;
+		end = magnetics[orient + 1].first;
+		for (; cnt < 60; cnt++) {
+			target = (begin + end) / 2.0;
+			double leftValue = 0.0;
+			double rightValue = 0.0;
+			for (int left = 0; left <=orient; left++) {
+				leftValue += (magnetics[left].second) / pow(magnetics[left].first - target, 2);
+			}
+			for (int right = orient+1; right <=N - 1; right++) {
+				rightValue += (magnetics[right].second) / pow(magnetics[right].first - target, 2);
+			}
+            // 자석으로부터 떨어질수록 인력이 약하게 작용됨
+			if(abs(leftValue - rightValue) < E_VALUE){
+                break;
+            }
+            if (leftValue > rightValue) {
+                begin = target;
+			}
+			else {
+				end = target;
+            }
+		}
+		printf("%.10lf ", target);
 	}
-
-	if (cnt >= 1) {
-		int fCnt = N - tCnt;
-		if (fCnt == 0 || tCnt == 0) {
-			return;
-		}
-		double trueW = 0, falseW = 0;
-		double trueD = 0, falseD = 0;
-		map <double, double> ::iterator it = magnetics.begin();
-		double range[2] = { 0.0, };
-
-		for (int n = 0; n < N; n++) {
-			if (check[n] == true) {
-				trueD += it->first;
-				trueW += it->second;
-				if(n == (tCnt-1)){
-					range[0] = it->first;
-				}
-			}
-			else if (check[n] == false) {
-				falseD += it->first;
-				falseW += it->second;
-				if (n == (tCnt)) {
-					range[1] = it->first;
-				}
-			}
-			it++;
-		}
-
-		double target = (range[0]+range[1])/2;
-		double tmpAlpha = sqrt(trueW / falseW);
-		double alpha[2] = { tmpAlpha,-tmpAlpha };
-		for (int a = 0; a < 2; a++) {
-			if (((alpha[a] * fCnt + tCnt) == 0) || ((tCnt*target - trueD) == 0) || ((falseD - fCnt * target) == 0)) {
-				continue;
-			}
-			//target = (alpha[a] * falseD - trueD) / (fCnt*alpha[a] - tCnt);
-			target = (trueD + alpha[a] * falseD) / (alpha[a]*fCnt+tCnt);
-			if ((target <= range[0])|| (target >= range[1])) {
-				continue;
-			}
-			double trueValue = trueW / (pow((tCnt*target - trueD), 2));
-			double falseValue = falseW / (pow((falseD-fCnt*target), 2));
-			if (abs(trueValue - falseValue) <= E_VALUE) {
-				answer.insert(target);
-			}
-		}
-	}
-
-	check[idx] = true;
-	gameStart(idx + 1, cnt + 1, tCnt + 1, vec);
 }
 
 int main() {
@@ -87,7 +52,6 @@ int main() {
 	for (tc = 1; tc <= T; tc++) {
 		scanf("%d", &N);
 		vector <double> tmpVec((N << 1) + 1, 0);
-		check.reserve(N + 1);
 
 		for (int n = 0; n < (N << 1); n++) {
 			scanf("%lf", &tmpVec[n]);
@@ -96,15 +60,10 @@ int main() {
 		for (int n = 0; n < N; n++) {
 			double curX = tmpVec[n];
 			double curW = tmpVec[N + n];
-			wholeW += curW;
-			magnetics[curX] = curW;
+			magnetics[n] = make_pair(curX,curW);
 		}
-		gameStart(0, 0, 0, tmpVec);
 		printf("#%d ", tc);
-		set <int> ::iterator setIt;
-		for (auto i : answer) {
-			printf("%.10lf ", i);
-		}
+		gameStart();
 		printf("\n");
 		cleaner();
 	}
