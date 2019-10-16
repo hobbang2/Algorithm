@@ -41,6 +41,36 @@ int calReward(string num) {
 	return reward;
 }
 
+void findAnsFOR(int & answer, string origin, int exc) {
+	queue <string> possibleNum;
+	int depth = 0;
+	possibleNum.push(origin);
+	while (possibleNum.empty() == false) {
+		if (depth == exc) {
+			break;
+		}
+		depth += 1;
+		int qSize = (int)possibleNum.size();
+		for (int q = 0; q < qSize; q++) {
+			string curNum = possibleNum.front(); possibleNum.pop();
+			for (int i = 0; i < (int)origin.size() -1; i++) {
+				for (int j = i + 1; j < (int)origin.size(); j++) {
+					string tmpNum = curNum;
+					swap(tmpNum[i], tmpNum[j]);
+					int tmpNumInt = stoi(tmpNum);
+					if (check[tmpNumInt][depth] == false) {
+						check[tmpNumInt][depth] = true;
+						possibleNum.push(tmpNum);
+						if (depth == exc) {
+							answer = (answer < tmpNumInt) ? tmpNumInt : answer;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void findAns(int & answer, string origin, int exc) {
 	queue <string> possibleNum;
 
