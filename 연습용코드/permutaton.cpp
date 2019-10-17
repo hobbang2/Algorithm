@@ -6,7 +6,7 @@ using namespace std;
 void Permutation(int cnt, int idx, int num_choice, vector <bool> & permutation_vec)
 {
 	// base case  
-	if (cnt > num_choice || idx > permutation_vec.size())
+	if (cnt > num_choice || idx >=permutation_vec.size())
 		return;
 	else
 	{
@@ -24,11 +24,16 @@ void Permutation(int cnt, int idx, int num_choice, vector <bool> & permutation_v
 		}
 		else
 		{
-			// 해당 idx 포함 -> cnt+1 
-			permutation_vec[idx] = true;
-			Permutation(cnt + 1, idx + 1, num_choice, permutation_vec);
-			permutation_vec[idx] = false;
-			Permutation(cnt + 1, idx + 1, num_choice, permutation_vec);
+			// permutation_vec[idx] = true;
+			// Permutation(cnt + 1, idx + 1, num_choice, permutation_vec);
+			// permutation_vec[idx] = false;
+			// Permutation(cnt, idx+1, num_choice, permutation_vec);
+			
+			for(int curIdx = idx ; curIdx < permutation_vec.size()-1;curIdx++){
+				permutation_vec[curIdx] = true;
+				Permutation(cnt + 1, curIdx + 1, num_choice, permutation_vec);
+				permutation_vec[curIdx] = false;
+			}
 		}
 	}
 }
@@ -36,8 +41,8 @@ void Permutation(int cnt, int idx, int num_choice, vector <bool> & permutation_v
 
 int main()
 {
-	vector <bool> per(5, false);
-	Permutation(0, 0, 5, per);
+	vector <bool> per(4, false);
+	Permutation(0, 0, 2, per);
 
 	return 0;
 }
