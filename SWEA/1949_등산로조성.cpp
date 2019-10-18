@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstring>
 #include <vector>
 
 using namespace std;
@@ -10,7 +11,6 @@ int dirX[4] = { 0,1,0,-1 };
 int N, k;
 int answer = 0;
 int maxH = -1;
-int maxCnt = 0;
 int map[9][9];
 int visited[9][9];
 
@@ -19,7 +19,6 @@ void cleaner() {
 	memset(visited, 0, sizeof(visited));
 	answer = 0;
 	maxH = -1;
-	maxCnt = 0;
 }
 
 bool isInMap(int y, int x) {
@@ -35,7 +34,7 @@ void buidRoad(int y, int x,int cnt) {
 		int nextX = x + dirX[d];
 		if ((isInMap(nextY, nextX) == true)&&(visited[nextY][nextX]==false) && (map[y][x] > map[nextY][nextX])) {
 			visited[nextY][nextX] = true;
-			buidRoad(y, x, cnt + 1);
+			buidRoad(nextY, nextX, cnt + 1);
 			visited[nextY][nextX] = false;
 		}
 		else {
@@ -67,10 +66,13 @@ int main() {
 					}
 					int cutY = cutIdx / N;
 					int cutX = cutIdx % N;
-					visited[y][x] = true;
-					map[cutY][cutX] -= k;
-					buidRoad(y, x, 0);
-					map[cutY][cutX] += k;
+					int tmpValue = map[cutY][cutX];
+                    visited[y][x] = true;
+                    for(int K = 0 ; K <k ;K++){
+                        map[cutY][cutX] -=1;
+    					buidRoad(y, x, 1);
+                    }
+					map[cutY][cutX] = tmpValue;
 					visited[y][x] = false;
 				}
 
