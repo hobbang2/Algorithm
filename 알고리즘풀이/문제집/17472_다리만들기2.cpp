@@ -36,6 +36,15 @@ int findParent(int nodeNum){
         return nodeNum;
     }
     else{
+        return parent[nodeNum] = findParent(parent[nodeNum])
+    }
+}
+
+int findParent(int nodeNum){
+    if(parent[nodeNum] == nodeNum){
+        return nodeNum;
+    }
+    else{
         return parent[nodeNum] = findParent(parent[nodeNum]);
     }
 }

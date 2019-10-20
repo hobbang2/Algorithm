@@ -6,7 +6,7 @@ using namespace std;
 void Permutation(int cnt, int idx, int num_choice, vector <bool> & permutation_vec)
 {
 	// base case  
-	if (cnt > num_choice || idx >=permutation_vec.size())
+	if (cnt > num_choice || idx >permutation_vec.size())
 		return;
 	else
 	{
@@ -29,7 +29,7 @@ void Permutation(int cnt, int idx, int num_choice, vector <bool> & permutation_v
 			// permutation_vec[idx] = false;
 			// Permutation(cnt, idx+1, num_choice, permutation_vec);
 			
-			for(int curIdx = idx ; curIdx < permutation_vec.size()-1;curIdx++){
+			for(int curIdx = idx ; curIdx < permutation_vec.size();curIdx++){
 				permutation_vec[curIdx] = true;
 				Permutation(cnt + 1, curIdx + 1, num_choice, permutation_vec);
 				permutation_vec[curIdx] = false;
