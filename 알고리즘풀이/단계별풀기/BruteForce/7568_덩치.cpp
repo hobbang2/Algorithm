@@ -36,30 +36,19 @@ int main() {
 		stuVec.push_back(tmpS);
 	}
 
-	sort(stuVec.begin() + 1, stuVec.end(), greater<Student>());
-
-	for (int idx = 2; idx <= N; idx++) {
-		if ((stuVec[idx - 1].w > stuVec[idx].w) &&
-			(stuVec[idx - 1].h > stuVec[idx].h)) {
-			if (tmpResult[idx - 1] == 0) {
-				tmpResult[idx - 1] = idx - 1;
-			}
-			tmpResult[idx] = idx;
-		}
-		else {
-			if (tmpResult[idx - 1] == 0) {
-				tmpResult[idx - 1] = idx - 1;
-			}
-			tmpResult[idx] = tmpResult[idx - 1];
-		}
-	}
+    for(int i = 1; i < N; i++){
+        for(int j = 1; j <= N;j++){
+            if(i == j){
+                continue;
+            }
+            if((stuVec[i].w < stuVec[j].w) && (stuVec[i].h < stuVec[j].h)){
+                result[i]++;
+            }
+        }
+    }
 
 	for (int idx = 1; idx <= N; idx++) {
-		result[stuVec[idx].idx] = tmpResult[idx];
-	}
-
-	for (int idx = 1; idx <= N; idx++) {
-		cout << result[idx] << " ";
+		cout << result[idx] + 1 << " ";
 	}
 	cout << "\n";
 	return 0;
