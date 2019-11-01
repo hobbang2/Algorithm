@@ -1,6 +1,5 @@
 #include <cstdio>
 
-
 int main() {
 	int N = 0;
 	int answer[10002] = {0, 666,1666,2666,3666,4666,5666,6660 };
