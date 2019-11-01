@@ -31,14 +31,6 @@ typedef struct Edge{
 
 vector <Edge> edgeSet;
 
-int findParent(int nodeNum){
-    if(parent[nodeNum] == nodeNum){
-        return nodeNum;
-    }
-    else{
-        return parent[nodeNum] = findParent(parent[nodeNum])
-    }
-}
 
 int findParent(int nodeNum){
     if(parent[nodeNum] == nodeNum){

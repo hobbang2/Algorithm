@@ -25,7 +25,7 @@ void mapCleaning(){
         }
     }
 }
-int getEnergy( int & numOfAtom) {
+int getEnergy(int & numOfAtom) {
 	int N = (int)atoms.size();
 	int energy = 0;
 	for (int n = 0; n < N; n++) {

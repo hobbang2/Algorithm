@@ -38,7 +38,7 @@ void devideStartLink(int idx, int cnt){
         ans = min(ans,abs(startPower-linkPower));
         return;
     }
-    for(int nextIdx = idx ; nextIdx < N;nextIdx++){
+    for(int nextIdx = idx ; nextIdx < N-1;nextIdx++){
         person[nextIdx] = true;
         devideStartLink(nextIdx+1,cnt+1);
         person[nextIdx] =false;
