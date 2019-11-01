@@ -2,7 +2,6 @@
 
 int N;
 int digitNum = 0;
-int digit[1000001];
 
 void getDigit() {
 	int tmpN = N;
