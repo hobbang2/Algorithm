@@ -45,3 +45,28 @@ int main() {
 	printf("%d\n", result);
 	return 0;
 }
+
+/*
+choyi0521님 코드 
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n, m,r=1e9;
+char s[50][51];
+int main() {
+	scanf("%d%d", &n, &m);
+	for (int i = 0; i < n; i++) scanf("%s", s+i);
+	for (int i = 0; i + 7 < n; i++) {
+		for (int j = 0; j + 7 < m; j++) {
+			int c = 0;
+			for (int k = i; k < i + 8; k++)
+				for (int l = j; l < j + 8; l++)
+                // ㅠㅠ 
+					c += s[k][l] == 'B' ^ k + l & 1;
+			r = min({ r,c,64 - c });
+		}
+	}
+	printf("%d", r);
+	return 0;
+}
+*/
