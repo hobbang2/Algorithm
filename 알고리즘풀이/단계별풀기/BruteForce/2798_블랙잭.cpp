@@ -30,6 +30,20 @@ void selectCard(int idx, int cnt) {
 	}
 }
 
+void selectCard_recur(int idx, int cnt,int tmpResult){
+    if(cnt==3){
+        if(tmpResult <= M && tmpResult > result){
+            result = tmpResult;
+        }
+        return;
+    }
+    if(idx > N){
+        return;
+    }
+    selectCard_recur(idx+1,cnt,tmpResult);
+    selectCard_recur(idx+1,cnt+1,tmpResult+numArr[idx]);
+}
+
 void selectCard_FOR(){
     for(int i = 1; i <= N; i++){
         for(int j = i + 1; j <= N; j++){
