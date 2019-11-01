@@ -23,6 +23,8 @@ void gameStart(int _y, int _x,char cpyMap[][55],bool flag) {
 			}
 		}
 	}
+    // 첫 번째 블록이 검정이냐, 화이트냐 
+    tmpResult = (tmpResult > 32) ? (64-tmpResult) : (tmpResult);
 	result = (result > tmpResult) ? tmpResult : result;
 	return;
 }
@@ -38,11 +40,7 @@ int main() {
 			char cpyMap[55][55] = { '0', };
 			memcpy(cpyMap, map, sizeof(map));
 			gameStart(y,x,cpyMap,false);
-			memcpy(cpyMap, map, sizeof(map));
-			cpyMap[y][x] = (cpyMap[y][x] == 'W' ? 'B' : 'W');
-			gameStart(y, x, cpyMap,true);
 		}
-
 	}
 	printf("%d\n", result);
 	return 0;
