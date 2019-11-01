@@ -37,14 +37,17 @@ int main() {
 	}
 
     for(int i = 1; i < N; i++){
+        int p = 1;
         for(int j = 1; j <= N;j++){
             if(i == j){
                 continue;
             }
             if((stuVec[i].w < stuVec[j].w) && (stuVec[i].h < stuVec[j].h)){
-                result[i]++;
+                p++;
+                //result[i]++;
             }
         }
+        cout << p << " ";
     }
 
 	for (int idx = 1; idx <= N; idx++) {
@@ -53,3 +56,26 @@ int main() {
 	cout << "\n";
 	return 0;
 }
+
+
+/*ref
+
+
+#include <cstdio>
+int t,x[55],y[55],p;
+int main(){
+  scanf("%d",&t);
+  for(int i=0;i<t;i++){
+      scanf("%d%d",x+i,y+i);
+  }
+  for(int i=0;i<t;i++){
+    p=1;
+    for(int j=0;j<t;j++){
+        if(x[i]<x[j]&&y[i]<y[j]){
+            p++;
+        }
+    }
+    printf("%d ",p);
+  }
+}
+*/
