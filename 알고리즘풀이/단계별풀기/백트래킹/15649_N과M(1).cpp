@@ -5,8 +5,8 @@ using namespace std;
 
 int N, M;
 bool check[10] = { false ,};
-void takeMofN(int idx, int cnt,string ans) {
-	if (idx > N+1 || cnt > M) {
+void takeMofN(int cnt,string ans) {
+	if (cnt > M) {
 		return;
 	}
 	if (cnt == M) {
@@ -17,21 +17,17 @@ void takeMofN(int idx, int cnt,string ans) {
 		return;
 	}
 	for (int curIdx = 1; curIdx <=N; curIdx++) {
-		if (check[curIdx] == true || curIdx == idx) {
+		if (check[curIdx] == true) {
 			continue;
 		}
 		check[curIdx] = true;
-		takeMofN(curIdx, cnt + 1,ans+to_string(curIdx));
+		takeMofN(cnt + 1,ans+to_string(curIdx));
 		check[curIdx] = false;
 	}
 }
 
 int main() {
 	scanf("%d %d", &N, &M);
-	for (int num = 1; num <= N; num++) {
-		check[num] = true;
-		takeMofN(num, 1, to_string(num));
-		check[num] = false;
-	}
+    takeMofN(0, "");
 	return 0;
 }
