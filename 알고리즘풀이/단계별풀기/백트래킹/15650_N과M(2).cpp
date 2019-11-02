@@ -25,6 +25,21 @@ void takeMofN(int idx, int cnt) {
 	}
 }
 
+void takeMofN(int idx, int cnt,string answer) {
+	if (idx > N+1 || cnt > M) {
+		return;
+	}
+	if (cnt == M) {
+		for (int n = 0; n < M; n++) {
+			printf("%c ", answer[n]);
+		}
+		printf("\n");
+		return;
+	}
+	takeMofN(idx + 1, cnt + 1, answer + to_string(idx));
+	takeMofN(idx + 1,cnt, answer);
+}
+
 int main() {
 	scanf("%d %d", &N, &M);
 	takeMofN(1, 0);
