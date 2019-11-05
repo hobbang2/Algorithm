@@ -8,50 +8,35 @@ using namespace std;
 int sdoku[11][11] = { false, };
 vector <int> likelihoodNum;
 vector <int> spaces;
+bool colCheck[10][10] = { false, };
+bool rowCheck[10][10] = { false, };
+bool squareCheck[10][10] = { false, };
 
-bool squareCheck() {
-	for (int x = 0; x < 9; x += 3) {
-		for (int y = 0; y < 9; y += 3) {
-			int _sum = 0;
-			for (int _y = y; _y < y + 3; _y++) {
-				for (int _x = x; _x < x + 3; _x++) {
-					_sum += sdoku[_y][_x];
-				}
-			}
-			if (_sum != 45) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool columnCheck() {
-	for (int y = 0; y < 9; y++) {
-		int _sum = 0;
-		for(int x= 0; x < 9; x++){
-			_sum += sdoku[y][x];
-		}
-		if (_sum != 45) {
-			return false;
-		}
-	}
-	return true;
-}
-
-bool rowCheck() {
-	for (int x = 0; x < 9; x++) {
-		int _sum = 0;
+void backTracking(int idx, int maxIdx) {
+	if (idx == maxIdx) {
 		for (int y = 0; y < 9; y++) {
-			_sum += sdoku[y][x];
+			for (int x = 0; x < 9; x++) {
+				printf("%d ", sdoku[y][x]);
+			}
+			printf("\n");
 		}
-		if (_sum != 45) {
-			return false;
+		exit(0);
+	}
+	else {
+		for (int n = 1; n <= 9; n++) {
+			int tmp = spaces[idx];
+			int y = tmp / 9, x = tmp % 9;
+			if (colCheck[y][n] && rowCheck[x][n] && squareCheck[y / 3 * 3 + x / 3][n]) {
+				continue;
+			}
+			colCheck[y][n] = rowCheck[x][n] = squareCheck[y / 3 * 3 + x / 3][n] = true;
+			sdoku[y][x] = n;
+			backTracking(idx + 1, maxIdx);
+			colCheck[y][n] = rowCheck[x][n] = squareCheck[y / 3 * 3 + x / 3][n] = false;
+			sdoku[y][x] = 0;
 		}
 	}
-	return true;
 }
-
 
 int main() {
 	for (int y = 0; y < 9; y++) {
@@ -61,7 +46,7 @@ int main() {
 		for (int x = 0; x < 9; x++) {
 			scanf("%d", &sdoku[y][x]);
 			_sum += sdoku[y][x];
-			check[sdoku[y][x]] = true;
+			check[sdoku[y][x]] = colCheck[y][sdoku[y][x]] = rowCheck[x][sdoku[y][x]] = squareCheck[y / 3 * 3 + x / 3][sdoku[y][x]] = true;
 			if (sdoku[y][x] == 0) {
 				cnt += 1;
 				spaces.push_back(y * 9 + x);
@@ -69,34 +54,15 @@ int main() {
 		}
 		if (cnt == 1) {
 			int tmp = spaces.back();
-			sdoku[tmp / 9][tmp % 9] = 45 - _sum;
+			int _y = tmp / 9;
+			int _x = tmp % 9;
+			sdoku[_y][_x] = 45 - _sum;
+			check[sdoku[_y][_x]] = colCheck[_y][sdoku[_y][_x]] = rowCheck[_x][sdoku[_y][_x]] = squareCheck[_y / 3 * 3 + _x / 3][sdoku[_y][_x]] = true;
 			spaces.pop_back();
 		}
-		else {
-			for (int c = 1; c < 10; c++) {
-				if (check[c] == false) {
-					likelihoodNum.push_back(c);
-				}
-			}
-		}
 	}
-	sort(likelihoodNum.begin(), likelihoodNum.end());
-	do {
-;		for (int s = 0; s < (int)spaces.size(); s++) {
-			sdoku[spaces[s] / 9][spaces[s] % 9] = likelihoodNum[s];
-		}
-		if (squareCheck() && columnCheck() && rowCheck()) {
-			break;
-		}
-	} while (next_permutation(likelihoodNum.begin(), likelihoodNum.end()));
-
-
-	for (int y = 0; y < 9; y++) {
-		for (int x = 0; x < 9; x++) {
-			printf("%d ", sdoku[y][x]);
-		}
-		printf("\n");
-	}
+		int maxIdx = (int)spaces.size();
+		backTracking(0, maxIdx);
 
 
 	return 0;
