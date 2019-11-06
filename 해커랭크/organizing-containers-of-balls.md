@@ -25,7 +25,9 @@
 1 1 1
 2 0 0
 ```
-
+### 참고자료 : vector::clear
+> vector 에 담긴 모든 원소를 삭제하고 container의 크기를 0으로 만든다.  
+container의 크기를 유지하고 싶으면 `vector<T>().swap(x);   // clear x reallocating ` 을 쓰자. 
 ```cpp
 string organizingContainers(vector<vector<int>> container) {
     for(int _n = 0; _n < n; _n++){
