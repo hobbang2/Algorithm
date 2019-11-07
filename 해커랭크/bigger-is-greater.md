@@ -24,7 +24,7 @@ string biggerIsGreater(string w) {
 }
 ```
 ### [Reference: Next lexicographical permutation algorithm](https://www.nayuki.io/page/next-lexicographical-permutation-algorithm)
-![image](https://www.nayuki.io/res/next-lexicographical-permutation-algorithm/next-permutation-algorithm.svg
+![image](https://www.nayuki.io/res/next-lexicographical-permutation-algorithm/next-permutation-algorithm.svg)
 
 > The key observation in this algorithm is that when we want to compute the next permutation, we must “increase” the sequence as little as possible. 
 

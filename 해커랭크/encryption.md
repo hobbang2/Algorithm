@@ -13,22 +13,21 @@ anic
 eday
 
 hae and via ecy
-
 ```
-### 참고자료 : vector::clear
-> vector 에 담긴 모든 원소를 삭제하고 container의 크기를 0으로 만든다.  
-container의 크기를 유지하고 싶으면 `vector<T>().swap(x);   // clear x reallocating ` 을 쓰자. 
+
 ```cpp
 int idx = 0;
 char compStr[82];
 char map[10][10];
 string encryption(string s) {
+    // 공백 압축
     for(int i=0; i <(int)s.size();i++){
         if(s[i] ==' '){
             continue;
         }
         compStr[idx++]=s[i];
     }
+    //하한과 상한 구하기
     int f = (int)floor(sqrt(idx));
     int c = (int)ceil(sqrt(idx));
     string tmpAns[10]={"",};
