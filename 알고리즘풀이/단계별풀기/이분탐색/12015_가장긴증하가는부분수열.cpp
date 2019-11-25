@@ -12,11 +12,15 @@ int binarySearch(int start, int end,int target) {
 	while (start < end) {
 		mid = (start + end) >> 1;
 		if (subSet[mid] > target) {
-			end = mid-1;
+			end = mid;
 		}
-		else {
+		else if(subSet[mid] < target){
 			start = mid + 1;
 		}
+        else{
+            // 같으면 갱신할 곳이 없음 
+            return -1;
+        }
 	}
 	return end;
 }
@@ -34,8 +38,8 @@ int main() {
 			subSet[size++] = A[n];
 		}
 		else {
-			int mid = binarySearch(0, size,A[n]);
-			subSet[mid] = A[n];
+			int mid = binarySearch(0, size-1,A[n]);
+            (mid != -1)? (subSet[mid] = A[n]):0;
 		}
 	}
 	printf("%d\n", size);
