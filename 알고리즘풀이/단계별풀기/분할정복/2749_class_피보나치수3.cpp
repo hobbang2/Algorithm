@@ -139,8 +139,13 @@ int main() {
 	matrix <ll> initMat(initial, 1, 2);
 	matrix <ll> multMat(mult, 2, 2);
 
-	scanf("%lld", &N);
-	matrix <ll> ans = initMat * calPow(multMat, N - 1);
-	ans.printAns();
+	if(N == 1){
+		printf("1\n");
+	}
+	else{
+		scanf("%lld", &N);
+		matrix <ll> ans = initMat * calPow(multMat, N - 1);
+		ans.printAns();
+	}
 	return 0;
 }
