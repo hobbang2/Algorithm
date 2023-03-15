@@ -1,80 +1,56 @@
-class MyMaxHeap:
-    
-    def __init__(self, max_size:int, target_list:list=[]):
-        self.max_size = max_size 
-        self.cur_size = 0
-        self.Heap = [0] * (self.max_size + 1 )
-        self.FRONT = 1 
+import sys
 
-        # if 0 < len(target_list) and max_size != len(target_list) :
-        #     print("target_list size must be same with max_size parameter")
-            
-        # elif 0 < len(target_list):
-        #     self.Heap = target_list
-        #     for i in range ( max_size // 2, 0 , -1):
-        #         self.heapify(i)
-                
-        return 
+read = sys.stdin.readline
 
-    # 부모 노드의 값은 자식 노드의 값보다 크거나 같다.
-    def heapify(self, idx):
-        # index 가 1부터 시작하므로 배열의 마지막 index 는 max_size 와 같다. 
-        # 자식 노드가 있을 때 까지 
-        while( 2*idx <= self.cur_size):
-            k = 2 * idx 
-            if( 2*idx + 1 <= self.cur_size):
-                k = 2 * idx if self.Heap[2*idx] > self.Heap[2*idx + 1] else 2 * idx + 1 
-            
-            if self.Heap[idx] > self.Heap[k]:
-                return
-            
-            self.Heap[idx], self.Heap[k] = self.Heap[k],self.Heap[idx]
-            idx = k
-    
-    def insert(self,item):
 
-        if(self.max_size <= self.cur_size):
-            print("[ERROR] size error")
+def up_heapify(index, queue):
+    child_index = index
+    while child_index != 0:
+        parent_index = (child_index - 1) // 2
+        if queue[parent_index] < queue[child_index]:
+            queue[parent_index], queue[child_index] = queue[child_index], queue[parent_index]
+            child_index = parent_index
+        else:
             return
-        
-        self.cur_size += 1
-        self.Heap[self.cur_size] = item
 
-        cur_idx = self.cur_size
-        parent_idx = cur_idx// 2 
 
-        while( parent_idx >= 1 and self.Heap[parent_idx] < self.Heap[cur_idx]):
-            self.Heap[parent_idx],self.Heap[cur_idx]  = self.Heap[cur_idx],self.Heap[parent_idx]
-            cur_idx = parent_idx
-            parent_idx = cur_idx // 2
+def find_bigger_child_index(index, heap_size):
+    parent = index
+    left_child = (parent * 2) + 1
+    right_child = (parent * 2) + 2
 
-    def extract(self):
-        if(self.cur_size <= 0 ):
-            return 0
-        ret = self.Heap[self.FRONT]
-        self.Heap[self.cur_size],self.Heap[self.FRONT] = self.Heap[self.FRONT], self.Heap[self.cur_size]
-        self.cur_size -= 1 
-        
-        # for i in range ( self.cur_size // 2, 0 , -1):
-        #     self.heapify(i)
-        self.heapify(1)
-        return ret
+    if left_child < heap_size and priority_queue[parent] < priority_queue[left_child]:
+        parent = left_child
+    if right_child < heap_size and priority_queue[parent] < priority_queue[right_child]:
+        parent = right_child
+    return parent
 
-def main():
-    EXTRACT = 0 
-    N = int(input())
-    target_heap = MyMaxHeap(N)
-    res = []
 
-    for idx in range(N):
-        order = int(input())
-        if( EXTRACT == order):
-            res.append(target_heap.extract())
-            # print(target_heap.extract())
-        else :
-            target_heap.insert(order)
+def down_heapify(index, queue):
+    parent_index = index
+    bigger_child_index = find_bigger_child_index(parent_index, len(queue))
+    while parent_index != bigger_child_index:
+        queue[parent_index], queue[bigger_child_index] = queue[bigger_child_index], queue[parent_index]
+        parent_index = bigger_child_index
+        bigger_child_index = find_bigger_child_index(parent_index, len(queue))
 
-    print(*res,sep='\n')
-    
-if __name__ == "__main__":
-    main() 
+
+def heap_pop(queue):
+    if not len(queue):
+        return 0
+    tmp = priority_queue[0]
+    priority_queue[0] = priority_queue[-1]
+    priority_queue.pop()
+    down_heapify(0, queue)
+    return tmp
+
+
+N = int(read())
+priority_queue = []
+for _ in range(N):
+    order = int(read())
+    if order != 0:
+        priority_queue.append(order)
+        up_heapify(len(priority_queue) - 1, priority_queue)
+    else:
+        print(heap_pop(priority_queue))
