@@ -29,6 +29,9 @@ def dijkstra(start_v : int)->None :
         cur_cost, cur_v = pq[0]
         heapq.heappop(pq)
         
+        if dist[cur_v] != cur_cost:
+            continue
+        
         for nxt_v in adj[cur_v]:
             nxt_cost = adj[cur_v][nxt_v]
              
