@@ -34,9 +34,10 @@ for m in range(M):
     tree_deque[x-1][y-1].append(z)
     tree_cnt += 1
 
-# 양분 먹고 죽은 나무 비료 처리 
-def spring_summer(tree_deque:list, earth:list)->tuple:
-    global N
+# 봄, 여름, 겨울 로직 통합
+def spring_summer_winter(tree_deque:list, earth:list)->tuple:
+    
+    global N, energy
     dead_cnt = 0
     life_tree_list = deque([])
 
@@ -45,6 +46,7 @@ def spring_summer(tree_deque:list, earth:list)->tuple:
             
             # deque이 비었는지 확인
             if False == bool(tree_deque[x][y]) :
+                earth[x][y] += energy[x][y]
                 continue
             
             # 양분 먹은 나무를 저장 
@@ -52,7 +54,7 @@ def spring_summer(tree_deque:list, earth:list)->tuple:
             # 죽은 나무의 영양분 
             dead_tree_energe = 0
 
-            # 현재 pq에서 하나씩 빼면서 본다.
+            # 현재 deque에서 하나씩 빼면서 본다.
             while( True == bool(tree_deque[x][y]) ):
                 
                 # 제일 어린 나무부터 
@@ -76,7 +78,9 @@ def spring_summer(tree_deque:list, earth:list)->tuple:
 
             # 살아남은 나무들
             tree_deque[x][y] = next_deque
-            earth[x][y] += dead_tree_energe 
+            earth[x][y] += (dead_tree_energe)
+            earth[x][y] += energy[x][y]
+
     
     return life_tree_list,dead_cnt
 
@@ -109,25 +113,13 @@ def autumn(life_tree_list:list,tree_deque:list)->int:
             life_cnt += 1
     return life_cnt
 
-def winter(earth:list, energy:list):
-
-    global N
-    
-    # 겨울엔 준비된 에너지만큼 추가된다.
-    for x in range(N):
-        for y in range(N):
-            earth[x][y] += energy[x][y]
-
-    return
-
 for k in range(K):
 
     if(0 == tree_cnt):
         break 
 
-    life_t, dead_cnt = spring_summer(tree_deque, earth)
+    life_t, dead_cnt = spring_summer_winter(tree_deque, earth)
     tree_cnt -= dead_cnt
     tree_cnt += autumn(life_t,tree_deque)
-    winter(earth, energy)
 
 print(tree_cnt)
