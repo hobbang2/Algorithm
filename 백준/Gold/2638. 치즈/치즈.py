@@ -99,5 +99,6 @@ while(cheeze_cnt > 0):
                 cheeze_cnt -= int(air_cnt >= 2)
 
     grid = next_grid
+    del(next_grid)
 
 print(year)
