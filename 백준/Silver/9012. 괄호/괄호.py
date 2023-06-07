@@ -9,22 +9,19 @@ T = int(input())
 for tc in range(T):
     
     bracket_str = list(input())
-    cur_stack = []
+    cnt = 0 
     
     for bracket in bracket_str :
         result = 'YES'
         
-        if( '(' == bracket):
-            cur_stack.append(bracket)
-            
-        elif( 0 == len(cur_stack)):
+        if( cnt < 0 ):
             result = 'NO'
             break
-
-        elif(')'== bracket):
-            cur_stack.pop()
+            
+        mul_val = 1 if '(' == bracket  else -1
+        cnt += 1 * mul_val
         
-    if( 0 < len(cur_stack)):
+    if( 0 != cnt):
         result = 'NO'
     
     print(result) 
