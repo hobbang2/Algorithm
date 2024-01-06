@@ -1,24 +1,30 @@
+from collections import defaultdict
+
 answer = -1
-visited = [[0] * 501 for _ in range(501)]
 
-def dfs(r:int , c:int, max_height:int, result:int, triangle:list):
-    
+
+def dfs(point, triangle, max_height, result):
     global answer
-
-    if(r >= max_height - 1):
+    r, c = point
+    
+    if( (r + 1) == max_height ):
         answer = max(answer, result)
-        return
+        return 
     
-    if(r < max_height - 1):
-        if(False == visited[r + 1][c]):
-            visited[r + 1][c] = True 
-            dfs(r + 1, c, max_height, result + triangle[r + 1][c],triangle)
-    
-        if( c != r):
-            if(False == visited[r + 1][c + 1]):
-                visited[r + 1][c + 1] = True
-                dfs(r + 1, c + 1, max_height, result + triangle[r + 1][c + 1],triangle)
+    dfs([r + 1, c], triangle, max_height, result + triangle[r + 1][c])
+    dfs([r + 1, c + 1], triangle, max_height, result + triangle[r + 1][c + 1])
+
+    return
+
 
 def solution(triangle):
-    dfs(0, 0, len(triangle), triangle[0][0], triangle)
-    return answer
+    dp = defaultdict(int)
+    max_height = len(triangle)
+    dp[(0,0)] = triangle[0][0]
+    
+    for h in range(1, max_height):
+        for item in range(h + 1):
+            dp[(h, item)] = triangle[h][item] + max(dp[(h - 1, item - 1)], dp[(h - 1, item)])
+    
+    return max(dp.values())
+    
