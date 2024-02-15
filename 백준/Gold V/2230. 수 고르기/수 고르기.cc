@@ -5,6 +5,7 @@
 int N, M = 0;
 
 int main() {
+	std::ios::sync_with_stdio(false); std::cin.tie(NULL); std::cout.tie(NULL);
 
 	std::cin >> N >> M;
 	std::vector<int> sequence(N + 1, 0);
