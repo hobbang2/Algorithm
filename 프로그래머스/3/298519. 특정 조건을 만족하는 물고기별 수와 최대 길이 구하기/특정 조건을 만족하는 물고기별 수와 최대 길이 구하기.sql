@@ -1,0 +1,23 @@
+-- 코드를 작성해주세요
+
+-- 평균 길이가 33CM 이상인 물고기들을 종류별로 분류
+-- 잡은 수 최대 길이, 물고기 종류 출력
+-- 물고기 종류 오름차순, 10cm 이하는 10CM로
+
+WITH TMP_FISH_INFO_LEN AS (
+SELECT  ID,
+        CASE
+            WHEN LENGTH IS NULL THEN 10
+        ELSE LENGTH
+        END AS 'APP_LENGTH' -- APPROXIMATE
+FROM    FISH_INFO
+)
+
+SELECT   COUNT(A.FISH_TYPE) AS FISH_COUNT,
+         MAX(B.APP_LENGTH) AS MAX_LENGTH,
+         A.FISH_TYPE
+FROM     FISH_INFO AS A, TMP_FISH_INFO_LEN AS B
+WHERE    A.ID = B.ID
+GROUP BY A.FISH_TYPE
+HAVING   AVG(B.APP_LENGTH) >= 33
+ORDER BY A.FISH_TYPE ASC
