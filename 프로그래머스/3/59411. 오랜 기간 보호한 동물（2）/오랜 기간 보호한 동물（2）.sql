@@ -1,11 +1,4 @@
--- 코드를 입력하세요
-SELECT  ANIMAL_ID, NAME
-FROM    ANIMAL_INS
-WHERE   ANIMAL_ID IN(
-    SELECT  ANIMAL_ID
-    FROM(
-    SELECT  ANIMAL_ID, RANK() OVER(ORDER BY B.DATETIME - A.DATETIME DESC) AS 'RANKING'
-    FROM    ANIMAL_INS AS A LEFT JOIN ANIMAL_OUTS AS B USING (ANIMAL_ID)
-    ) AS Z
-    WHERE Z.RANKING <= 2
-)
+SELECT a.animal_id,a.name 
+from animal_ins a
+join animal_outs b on a.animal_id = b.animal_id
+order by DATEDIFF(b.DATETIME,a.datetime) desc limit 2
