@@ -29,8 +29,27 @@ string makeTargetStr(int n){
     return ret;
 }
 
+int dp[20] = {1,};
+
+int dpSolution(int n){
+    dp[0] = 1; dp[1] = 1; dp[2] = 2; dp[3] = 5;
+    
+    if(n > 3){
+        for(int targetIdx = 4; targetIdx <= n; ++targetIdx){
+            for(int secondIdx = 0 ; secondIdx < targetIdx; ++secondIdx){
+                dp[targetIdx] += (dp[secondIdx] * dp[targetIdx -1 - secondIdx]);
+                
+            }
+            
+        }
+    }
+    return dp[n];
+}
+
 
 int solution(int n) {
     
-    return dfs(0, 0, n);
+    // return dfs(0, 0, n);
+    return dpSolution(n);
+    
 }
