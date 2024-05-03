@@ -20,9 +20,6 @@ def solution(ingredient):
                 answer += 1
             else:
                 for c in check_item[::-1]:
-                    # if(c != 1):
-                        # break
-                    # else:
                     prepare_hamburger.append(c)
                         
         else:
