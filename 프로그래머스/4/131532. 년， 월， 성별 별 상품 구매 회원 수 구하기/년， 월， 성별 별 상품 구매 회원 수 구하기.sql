@@ -1,0 +1,28 @@
+-- 코드를 입력하세요
+-- 년, 월, 성별 별로 상품을 구매한 회원수를 집계하는 SQL문을 작성해주세요. 결과는 년, 월, 성별을 기준으로 오름차순 정렬해주세요. 이때, 성별 정보가 없는 경우 결과에서 제외해주세요
+
+WITH VALID_USER_INFO AS (
+    SELECT  USER_ID, GENDER, AGE, JOINED
+    FROM    USER_INFO
+    WHERE   GENDER = 1 OR GENDER = 0
+),
+
+GROUP_ONLIE_SALE AS (
+    SELECT  
+            USER_ID,
+            SUM(SALES_AMOUNT) AS TOAL_SALES_AMOUNT,
+            YEAR(SALES_DATE) AS 'YEAR',
+            MONTH(SALES_DATE) AS 'MONTH'
+    FROM    ONLINE_SALE
+    GROUP BY USER_ID, YEAR, MONTH
+    
+)
+
+SELECT  A.YEAR, A.MONTH, B.GENDER, COUNT(*) AS USERS
+FROM    GROUP_ONLIE_SALE AS A LEFT JOIN  VALID_USER_INFO AS B 
+    USING (USER_ID)
+WHERE    B.GENDER = 0 OR B.GENDER = 1
+GROUP BY B.GENDER, A.YEAR, A.MONTH
+ORDER BY A.YEAR ASC, A.MONTH ASC, B.GENDER ASC;
+
+
