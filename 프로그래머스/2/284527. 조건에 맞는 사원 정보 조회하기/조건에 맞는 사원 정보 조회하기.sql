@@ -1,0 +1,20 @@
+-- 코드를 작성해주세요
+-- 2022년도 한해 평가 점수가 가장 높은 사원 정보를 조회하려 합니다. 2022년도 평가 점수가 가장 높은 사원들의 점수, 사번, 성명, 직책, 이메일을 조회하는 SQL문을 작성
+
+WITH TOTAL_SCORE_TBL AS (
+    SELECT   EMP_NO,
+             SUM(SCORE) AS SCORE
+    FROM     HR_GRADE
+    GROUP BY EMP_NO
+    ORDER BY SCORE DESC
+),
+
+HIGH_SCORE_TBL AS (
+    SELECT  EMP_NO, SCORE
+    FROM    TOTAL_SCORE_TBL
+    WHERE   SCORE = (SELECT SCORE FROM TOTAL_SCORE_TBL LIMIT 1)
+)
+
+SELECT  H.SCORE, E.EMP_NO, E.EMP_NAME, E.POSITION, E.EMAIL
+FROM    HIGH_SCORE_TBL AS H INNER JOIN HR_EMPLOYEES AS E
+        USING (EMP_NO)
