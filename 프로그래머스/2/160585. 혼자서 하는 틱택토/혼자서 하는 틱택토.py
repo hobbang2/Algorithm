@@ -21,29 +21,20 @@ def doesGameDone(board, r, c, targetstr):
     return False
     
 def solution(board):
-    is_done_X = False 
-    is_done_O = False 
-    answer = 0 
+    isDone = False 
+    
     cnt_X = 0
     cnt_O = 0
     
     for r in range(3):
         for c in range(3):
-            if('X' == board[r][c]):
-                cnt_X += 1
-                is_done_X |= doesGameDone(board, r, c, board[r][c])
-            elif('O' == board[r][c]):
-                cnt_O += 1
-                is_done_O |= doesGameDone(board, r, c, board[r][c])
+            cnt_X += int('X' == board[r][c])
+            cnt_O += int('O' == board[r][c])
+            
+            isDone |= doesGameDone(board, r, c, board[r][c])
                 
-    if(is_done_X & is_done_O):
-        answer = 0 
-    else:
-
-        answer = int(
-                ((True == is_done_O) and (cnt_X + 1 == cnt_O)) \
-                or ((True == is_done_X) and (cnt_X == cnt_O ))\
-                or ((False == is_done_O) and (False == is_done_X) and (cnt_X == cnt_O))
-                or ((False == is_done_O) and (False == is_done_X) and (cnt_X + 1 == cnt_O))
-                )
+    answer = int(((True == isDone) and (cnt_X + 1 == cnt_O)) \
+            or ((False == isDone) and (cnt_X == cnt_O))\
+            or ((False == isDone) and (cnt_X + 1 == cnt_O)))
+    
     return answer
